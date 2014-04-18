@@ -7,21 +7,25 @@ import businesslayer.Businesslayer;
 import bussinessobjects.GuiData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class MainController implements Initializable{
 	
 	/*Comboboxen*/
-	@FXML private ComboBox<String> cbColor;
 	@FXML private ComboBox<String> cbShape;
 	@FXML private ComboBox<Integer> cbWeight;
 	
@@ -31,6 +35,7 @@ public class MainController implements Initializable{
 	@FXML TextField tfRadius;
 	
 	@FXML Pane pCanvas;
+	@FXML Pane pColorPicker;
 	
 	/*Buttons*/
 	@FXML private Button bClear, bGroup, bShape, bEdit, bUndo, bRedo;
@@ -39,12 +44,26 @@ public class MainController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		/* Initialize Comboboxes */
 		cbShape.getItems().addAll("Kreis", "Ellipse", "Dreieck", "Quadrat", "Rechteck");
-		cbColor.getItems().addAll("Rot", "Grün");
 		cbWeight.getItems().addAll(1,2,4,8,16,32);
 		
 		Canvas canvas = new Canvas(474,482);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
         drawShapes(gc);
+        
+        final ColorPicker colorPicker = new ColorPicker();
+        colorPicker.setValue(Color.CORAL);
+        
+//        final Text text = new Text("Try the color picker!");
+//        text.setFont(Font.font ("Verdana", 20));
+//        text.setFill(colorPicker.getValue());
+        
+//        colorPicker.setOnAction(new EventHandler() {
+//            public void handle(Event t) {
+//                text.setFill(colorPicker.getValue());               
+//            }
+//        });
+ 
+        pColorPicker.getChildren().addAll(colorPicker);
 		
 		pCanvas.getChildren().add(canvas);
 	}
@@ -82,7 +101,6 @@ public class MainController implements Initializable{
 		GuiData g = new GuiData();
 		
 		/*TODO: Pen sperren wenn Form ausgewählt wurde und umgekehrt*/
-		g.setColor(cbColor.getSelectionModel().getSelectedItem());
 		g.setShape(cbShape.getSelectionModel().getSelectedItem());
 		//g.setPen(cbPen.getSelectionModel().getSelectedItem());
 		

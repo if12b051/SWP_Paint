@@ -9,19 +9,22 @@
 <AnchorPane prefHeight="484.0" prefWidth="627.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.MainController">
   <!-- TODO Add Nodes -->
   <children>
-    <SplitPane dividerPositions="0.7632" focusTraversable="true" prefHeight="484.0" prefWidth="558.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <SplitPane dividerPositions="0.7312" focusTraversable="true" prefHeight="484.0" prefWidth="558.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
           <children>
             <Pane fx:id="pCanvas" prefHeight="482.0" prefWidth="474.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
           </children>
         </AnchorPane>
-        <AnchorPane maxWidth="145.0" minHeight="0.0" minWidth="145.0" prefHeight="482.0" prefWidth="224.0">
+        <AnchorPane maxWidth="165.0" minHeight="0.0" minWidth="165.0" prefHeight="482.0" prefWidth="-1.0">
           <children>
-            <Button id="bClean" fx:id="bClear" layoutX="12.0" layoutY="351.0" mnemonicParsing="false" text="Löschen" />
-            <Button fx:id="bGroup" layoutX="12.0" layoutY="320.0" mnemonicParsing="false" text="Gruppieren" />
-            <Button id="bStart" fx:id="bShape" layoutX="12.0" layoutY="243.0" mnemonicParsing="false" onAction="#start" text="Auswahl bestätigen" />
-            <ComboBox fx:id="cbColor" layoutX="64.0" layoutY="90.0" prefWidth="71.0">
+            <ToolBar layoutX="0.0" layoutY="-1.0" prefWidth="160.0">
+              <items>
+                <Button fx:id="bUndo" mnemonicParsing="false" text="Undo" />
+                <Button fx:id="bRedo" mnemonicParsing="false" text="Redo" />
+              </items>
+            </ToolBar>
+            <ComboBox fx:id="cbShape" layoutX="64.0" layoutY="40.0" prefHeight="21.0" prefWidth="87.0">
               <items>
                 <FXCollections fx:factory="observableArrayList">
                   <String fx:value="Item 1" />
@@ -30,30 +33,22 @@
                 </FXCollections>
               </items>
             </ComboBox>
-            <ComboBox fx:id="cbShape" layoutX="64.0" layoutY="59.0" prefHeight="-1.0" prefWidth="71.0">
-              <items>
-                <FXCollections fx:factory="observableArrayList">
-                  <String fx:value="Item 1" />
-                  <String fx:value="Item 2" />
-                  <String fx:value="Item 3" />
-                </FXCollections>
-              </items>
-            </ComboBox>
-            <Label layoutX="15.0" layoutY="92.0" text="Farbe" />
-            <Label layoutX="14.0" layoutY="62.0" text="Form" />
-            <Label layoutX="15.0" layoutY="125.0" text="Dicke" />
-            <TextField id="tfLaenge" fx:id="tfLength" layoutX="85.0" layoutY="211.0" prefWidth="50.0" />
-            <TextField id="tfBreite" fx:id="tfWidth" layoutX="85.0" layoutY="182.0" prefWidth="50.0" />
-            <Label layoutX="15.0" layoutY="185.0" text="Breite" />
-            <Label layoutX="15.0" layoutY="214.0" text="Länge" />
-            <Button fx:id="bUndo" layoutX="15.0" layoutY="14.0" mnemonicParsing="false" text="Undo" />
-            <Button fx:id="bRedo" layoutX="87.0" layoutY="14.0" mnemonicParsing="false" text="Redo" />
-            <Separator layoutX="0.0" layoutY="46.0" prefWidth="144.0" />
-            <Separator layoutX="0.0" layoutY="276.0" prefWidth="144.0" />
-            <TextField id="tfBreite" fx:id="tfRadius" layoutX="85.0" layoutY="153.0" prefWidth="50.0" />
-            <Label layoutX="15.0" layoutY="156.0" text="Radius" />
-            <Button fx:id="bEdit" layoutX="12.0" layoutY="289.0" mnemonicParsing="false" text="Bearbeiten" />
-            <ComboBox id="cbColor" fx:id="cbWeight" layoutX="85.0" layoutY="123.0" minWidth="48.0" prefHeight="21.0" prefWidth="50.0">
+            <Pane fx:id="pColorPicker" layoutX="65.0" layoutY="71.0" prefHeight="21.0" prefWidth="87.0" />
+            <Button id="bClean" fx:id="bClear" layoutX="13.0" layoutY="332.0" mnemonicParsing="false" text="Löschen" />
+            <Button fx:id="bGroup" layoutX="13.0" layoutY="301.0" mnemonicParsing="false" text="Gruppieren" />
+            <Button id="bStart" fx:id="bShape" layoutX="13.0" layoutY="224.0" mnemonicParsing="false" onAction="#doAuswahl" text="Auswahl bestätigen" />
+            <Label layoutX="16.0" layoutY="73.0" text="Farbe" />
+            <Label layoutX="15.0" layoutY="43.0" text="Form" />
+            <Label layoutX="16.0" layoutY="106.0" text="Dicke" />
+            <TextField id="tfLaenge" fx:id="tfLength" layoutX="86.0" layoutY="192.0" prefWidth="65.0" />
+            <TextField id="tfBreite" fx:id="tfWidth" layoutX="86.0" layoutY="163.0" prefWidth="65.0" />
+            <Label layoutX="16.0" layoutY="166.0" text="Breite" />
+            <Label layoutX="16.0" layoutY="195.0" text="Länge" />
+            <Separator layoutX="1.0" layoutY="257.0" prefWidth="160.0" />
+            <TextField id="tfBreite" fx:id="tfRadius" layoutX="86.0" layoutY="134.0" prefWidth="65.0" />
+            <Label layoutX="16.0" layoutY="137.0" text="Radius" />
+            <Button fx:id="bEdit" layoutX="13.0" layoutY="270.0" mnemonicParsing="false" text="Bearbeiten" />
+            <ComboBox id="cbColor" fx:id="cbWeight" layoutX="86.0" layoutY="104.0" minWidth="48.0" prefHeight="21.0" prefWidth="65.0">
               <items>
                 <FXCollections fx:factory="observableArrayList">
                   <String fx:value="Item 1" />
