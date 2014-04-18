@@ -51,7 +51,7 @@ public class MainController implements Initializable{
         drawShapes(gc);
         
         final ColorPicker colorPicker = new ColorPicker();
-        colorPicker.setValue(Color.CORAL);
+        colorPicker.setValue(Color.ALICEBLUE);
         
 //        final Text text = new Text("Try the color picker!");
 //        text.setFont(Font.font ("Verdana", 20));
@@ -95,8 +95,8 @@ public class MainController implements Initializable{
 		cbWeight.getItems().addAll(1,2,4,8,16,32);
 	}
 	
-	public void start(){
-		System.out.println("Applikation ist gestartet");
+	public void doAuswahl(){
+		System.out.println("Auswahl getroffen.");
 		
 		GuiData g = new GuiData();
 		
