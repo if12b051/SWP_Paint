@@ -35,20 +35,20 @@
             <Button id="bStart" fx:id="bShape" layoutX="101.0" layoutY="224.0" mnemonicParsing="false" onAction="#doDraw" prefWidth="54.0" text="Draw" />
             <Label layoutX="16.0" layoutY="76.0" text="Color" />
             <Label layoutX="16.0" layoutY="45.0" text="Tools" />
-            <Label layoutX="16.0" layoutY="106.0" text="Size" />
+            <Label layoutX="16.0" layoutY="108.0" text="Size" />
             <Label layoutX="16.0" layoutY="166.0" text="Width" />
             <Label layoutX="16.0" layoutY="195.0" text="Height" />
             <Separator layoutX="1.0" layoutY="257.0" prefWidth="160.0" />
             <Label layoutX="16.0" layoutY="137.0" text="Radius" />
             <Button fx:id="bEdit" layoutX="16.0" layoutY="224.0" mnemonicParsing="false" onAction="#doEdit" prefWidth="54.0" text="Edit" />
-            <Slider fx:id="sRadius" layoutX="65.0" layoutY="138.0" prefWidth="65.0" />
-            <Label fx:id="lblRadius" layoutX="137.0" layoutY="136.0" prefWidth="21.0" text="0" />
-            <Slider fx:id="sWidth" layoutX="65.0" layoutY="167.0" prefWidth="65.0" />
-            <Label fx:id="LblWidth" layoutX="137.0" layoutY="165.0" prefWidth="21.0" text="0" />
-            <Slider fx:id="sLength" layoutX="65.0" layoutY="196.0" prefWidth="65.0" />
-            <Label fx:id="lblLength" layoutX="137.0" layoutY="194.0" prefWidth="21.0" text="0" />
-            <Slider id="sRadius" fx:id="sSize" layoutX="65.0" layoutY="107.0" prefWidth="65.0" />
-            <Label id="lblRadius" fx:id="lblSize" layoutX="137.0" layoutY="105.0" prefWidth="21.0" text="0" />
+            <Slider fx:id="sRadius" layoutX="64.0" layoutY="138.0" prefWidth="65.0" />
+            <Slider fx:id="sWidth" layoutX="64.0" layoutY="167.0" prefWidth="65.0" />
+            <Slider fx:id="sLength" layoutX="64.0" layoutY="196.0" prefWidth="65.0" />
+            <Slider id="sRadius" fx:id="sSize" layoutX="64.0" layoutY="109.0" prefWidth="65.0" />
+            <TextField fx:id="tfSize" layoutX="130.0" layoutY="105.0" prefWidth="29.000099999997474" />
+            <TextField fx:id="tfRadius" layoutX="130.0" layoutY="134.0" prefWidth="29.000099999997474" />
+            <TextField fx:id="tfWidth" layoutX="130.0" layoutY="163.0" prefWidth="29.000099999997474" />
+            <TextField fx:id="tfHeight" layoutX="130.0" layoutY="192.0" prefWidth="29.000099999997474" />
           </children>
         </AnchorPane>
       </items>

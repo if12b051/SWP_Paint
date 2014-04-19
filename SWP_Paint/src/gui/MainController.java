@@ -18,6 +18,7 @@ import shapes.EllipseShape;
 import shapes.RectangleShape;
 import shapes.TriangleShape;
 import application.Preference;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,6 +42,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.ArcType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.StringConverter;
+import javafx.util.converter.DoubleStringConverter;
 
 public class MainController implements Initializable{
 	
@@ -50,12 +53,13 @@ public class MainController implements Initializable{
 	/* GUI Objects */
 	@FXML private ComboBox<String> cbTools;
 	@FXML private Slider sSize, sWidth, sLength, sRadius;
-	@FXML private Label lblSize, lblWidth, lblLength, lblRadius;
+	@FXML private TextField tfSize, tfWidth, tfLength, tfRadius;
 	@FXML private Pane pCanvas, pColorPicker;
 	@FXML private Button bClear, bGroup, bShape, bEdit, bUndo, bRedo;
 	private final ColorPicker colorPicker = new ColorPicker();
 	private GraphicsContext artBoard;
 	private Canvas canvas;
+	private MainControllerModel model;
 	
 	/* important general objects */
 	private Stack<Command> undo;
@@ -78,6 +82,15 @@ public class MainController implements Initializable{
 		sLength.setValue(50);
 		sRadius.setValue(50);
 		
+		
+		/* initialize bindings and model */
+		model = new MainControllerModel();
+		StringConverter<? extends Number> converter = new DoubleStringConverter();
+		
+		Bindings.bindBidirectional(tfRadius.textProperty(), sRadius.valueProperty(), (StringConverter<Number>)converter);
+		tfRadius.textProperty().bindBidirectional(model.getRadiusProperty());
+//		tfRadius.textProperty().bind(model.refreshRadiusBinding());
+		
 		/* initialize canvas */
 		canvas = new Canvas(canvasWidth,canvasHeight);
 		artBoard = canvas.getGraphicsContext2D();
@@ -92,6 +105,11 @@ public class MainController implements Initializable{
         /* initialize prototypes */
         ellipsePrototype = new EllipseShape();
         rectanglePrototype = new RectangleShape();
+        
+        /* initialize colorpicker and canvas */
+        colorPicker.setValue(Color.AZURE);
+        pColorPicker.getChildren().addAll(colorPicker);
+		pCanvas.getChildren().add(canvas);
         
         /* add eventListeners to canvas for: CLICKED and DRAGGED*/
         canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -140,24 +158,10 @@ public class MainController implements Initializable{
         	
         });
         
-        colorPicker.setValue(Color.AZURE);
-        
-//        final Text text = new Text("Try the color picker!");
-//        text.setFont(Font.font ("Verdana", 20));
-//        text.setFill(colorPicker.getValue());
-        
-//        colorPicker.setOnAction(new EventHandler() {
-//            public void handle(Event t) {
-//                text.setFill(colorPicker.getValue());               
-//            }
-//        });
- 
-        pColorPicker.getChildren().addAll(colorPicker);
-		pCanvas.getChildren().add(canvas);
+		setPreferences("draw");
 	}
 	
 	private void setPreferences(String newAction) {
-		
 		preferences.put("action", new Preference(newAction));
 		preferences.put("tool", new Preference(cbTools.getValue()));
 		preferences.put("paint", new Preference(colorPicker.getValue()));
@@ -165,8 +169,6 @@ public class MainController implements Initializable{
 		preferences.put("radius", new Preference(sRadius.getValue()));
 		preferences.put("width", new Preference(sWidth.getValue()));
 		preferences.put("height", new Preference(sLength.getValue()));
-		
-		
 	}
 	
 	private void drawShapes(GraphicsContext gc) {
