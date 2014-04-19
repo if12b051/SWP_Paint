@@ -1,6 +1,5 @@
 package application;
 
-import shapes.CircleShape;
 import javafx.scene.paint.Paint;
 
 public class Preference {

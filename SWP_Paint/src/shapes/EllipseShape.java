@@ -4,7 +4,7 @@ import javafx.scene.paint.Paint;
 
 public class EllipseShape implements Shape {
 
-	private double centerX, centerY, length, radius;
+	private double centerX, centerY, width, radius;
 	private Paint paint;
 	
 	public EllipseShape() {
@@ -41,12 +41,12 @@ public class EllipseShape implements Shape {
 		this.centerY = centerY;
 	}
 
-	public double getLength() {
-		return length;
+	public double getWidth() {
+		return width;
 	}
 
-	public void setLength(double length) {
-		this.length = length;
+	public void setWidth(double width) {
+		this.width = width;
 	}
 
 	public double getRadius() {

@@ -1,12 +1,19 @@
 package commands;
 
+import gui.MainController;
 import javafx.scene.canvas.GraphicsContext;
 
 public class ClearAll implements Command{
-
+	
+	GraphicsContext curArtBoard;
+	
+	public ClearAll(GraphicsContext artBoard) {
+		curArtBoard = artBoard;
+	}
+	
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		curArtBoard.clearRect(0, 0, MainController.canvasWidth, MainController.canvasHeight);
 	}
 
 	@Override

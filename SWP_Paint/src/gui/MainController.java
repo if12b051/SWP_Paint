@@ -10,11 +10,13 @@ import java.util.Stack;
 import commands.ClearAll;
 import commands.Command;
 import commands.CreateEllipse;
+import commands.CreateRectangle;
 import commands.EditShape;
 import commands.GroupShapes;
-import shapes.CircleShape;
 import shapes.CloneFactory;
 import shapes.EllipseShape;
+import shapes.RectangleShape;
+import shapes.TriangleShape;
 import application.Preference;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,17 +60,23 @@ public class MainController implements Initializable{
 	/* important general objects */
 	private Stack<Command> undo;
     private Stack<Command> redo;
-    private Map<String, Preference> preferences; //"action", "tool", "paint", "size", "radius", "width", "length"
+    private Map<String, Preference> preferences; //"action", "tool", "paint", "size", "radius", "width", "height"
     private CloneFactory cloneFactory;
     
     /* geometry prototypes */
 	private EllipseShape ellipsePrototype;
+	private RectangleShape rectanglePrototype;
+	private TriangleShape trianglePrototype;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		/* Initialize Combobox and set a value */
+		/* Initialize GUI and set a values */
 		cbTools.getItems().addAll(TOOL_TYPES);
 		cbTools.setValue("Circle");
+		sSize.setValue(50);
+		sWidth.setValue(50);
+		sLength.setValue(50);
+		sRadius.setValue(50);
 		
 		/* initialize canvas */
 		canvas = new Canvas(canvasWidth,canvasHeight);
@@ -83,6 +91,7 @@ public class MainController implements Initializable{
         
         /* initialize prototypes */
         ellipsePrototype = new EllipseShape();
+        rectanglePrototype = new RectangleShape();
         
         /* add eventListeners to canvas for: CLICKED and DRAGGED*/
         canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -111,7 +120,8 @@ public class MainController implements Initializable{
 							break;
 						case "Rectangle":
 						case "Square":
-							//command = new CreateShape(preferences, mouseX, mouseY);
+							RectangleShape newRectangle = (RectangleShape) cloneFactory.getClone(rectanglePrototype);
+							command = new CreateRectangle(preferences, mouseX, mouseY, newRectangle, artBoard);
 							break;
 						case "Pencil":
 							break;
@@ -154,7 +164,7 @@ public class MainController implements Initializable{
 		preferences.put("size", new Preference(sSize.getValue()));
 		preferences.put("radius", new Preference(sRadius.getValue()));
 		preferences.put("width", new Preference(sWidth.getValue()));
-		preferences.put("length", new Preference(sLength.getValue()));
+		preferences.put("height", new Preference(sLength.getValue()));
 		
 		
 	}
@@ -198,7 +208,7 @@ public class MainController implements Initializable{
 		String action = "clear";
 		System.out.println("Action: " + action);
 		setPreferences(action);
-		Command command = new ClearAll();
+		Command command = new ClearAll(artBoard);
 		command.execute();
 		putCmdOnStack(command);
 	}
