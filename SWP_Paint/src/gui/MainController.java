@@ -19,6 +19,8 @@ import shapes.RectangleShape;
 import shapes.TriangleShape;
 import application.Preference;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -52,10 +54,10 @@ public class MainController implements Initializable{
 	
 	/* GUI Objects */
 	@FXML private ComboBox<String> cbTools;
-	@FXML private Slider sSize, sWidth, sLength, sRadius;
-	@FXML private TextField tfSize, tfWidth, tfLength, tfRadius;
+	@FXML private Slider sSize, sWidth, sHeight, sRadius;
+	@FXML private Label lblRadius, lblSize, lblWidth, lblHeight;
 	@FXML private Pane pCanvas, pColorPicker;
-	@FXML private Button bClear, bGroup, bShape, bEdit, bUndo, bRedo;
+	@FXML private Button bClear, bGroup, bShape, bEdit, bUndo, bRedo, bHelp;
 	private final ColorPicker colorPicker = new ColorPicker();
 	private GraphicsContext artBoard;
 	private Canvas canvas;
@@ -74,22 +76,14 @@ public class MainController implements Initializable{
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		/* Initialize GUI and set a values */
-		cbTools.getItems().addAll(TOOL_TYPES);
-		cbTools.setValue("Circle");
-		sSize.setValue(50);
-		sWidth.setValue(50);
-		sLength.setValue(50);
-		sRadius.setValue(50);
-		
-		
 		/* initialize bindings and model */
 		model = new MainControllerModel();
-		StringConverter<? extends Number> converter = new DoubleStringConverter();
 		
-		Bindings.bindBidirectional(tfRadius.textProperty(), sRadius.valueProperty(), (StringConverter<Number>)converter);
-		tfRadius.textProperty().bindBidirectional(model.getRadiusProperty());
-//		tfRadius.textProperty().bind(model.refreshRadiusBinding());
+		
+		/* Initialize GUI, set values, create listeners */
+		resetValues();
+		createListeners();
+		resetValues();
 		
 		/* initialize canvas */
 		canvas = new Canvas(canvasWidth,canvasHeight);
@@ -157,8 +151,6 @@ public class MainController implements Initializable{
 			}
         	
         });
-        
-		setPreferences("draw");
 	}
 	
 	private void setPreferences(String newAction) {
@@ -168,7 +160,7 @@ public class MainController implements Initializable{
 		preferences.put("size", new Preference(sSize.getValue()));
 		preferences.put("radius", new Preference(sRadius.getValue()));
 		preferences.put("width", new Preference(sWidth.getValue()));
-		preferences.put("height", new Preference(sLength.getValue()));
+		preferences.put("height", new Preference(sHeight.getValue()));
 	}
 	
 	private void drawShapes(GraphicsContext gc) {
@@ -253,5 +245,58 @@ public class MainController implements Initializable{
 		undo.push(command);
 		if(!redo.isEmpty())
 			redo.clear();
+	}
+	
+	private void createListeners() {
+		StringConverter<? extends Number> converter = new DoubleStringConverter();
+		
+		Bindings.bindBidirectional(lblRadius.textProperty(), sRadius.valueProperty(), (StringConverter<Number>)converter);
+		lblRadius.textProperty().addListener(new ChangeListener<String>()  {
+			@Override
+			public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+				lblRadius.setText(Integer.toString((int) Double.parseDouble(newValue)));
+				setPreferences("draw");
+			}
+		});
+		
+		Bindings.bindBidirectional(lblSize.textProperty(), sSize.valueProperty(), (StringConverter<Number>)converter);
+		lblSize.textProperty().addListener(new ChangeListener<String>()  {
+			@Override
+			public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+				lblSize.setText(Integer.toString((int) Double.parseDouble(newValue)));
+				setPreferences("draw");
+			}
+		});
+		
+		Bindings.bindBidirectional(lblWidth.textProperty(), sWidth.valueProperty(), (StringConverter<Number>)converter);
+		lblWidth.textProperty().addListener(new ChangeListener<String>()  {
+			@Override
+			public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+				lblWidth.setText(Integer.toString((int) Double.parseDouble(newValue)));
+				setPreferences("draw");
+			}
+		});
+		
+		Bindings.bindBidirectional(lblHeight.textProperty(), sHeight.valueProperty(), (StringConverter<Number>)converter);
+		lblHeight.textProperty().addListener(new ChangeListener<String>()  {
+			@Override
+			public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+				lblHeight.setText(Integer.toString((int) Double.parseDouble(newValue)));
+				setPreferences("draw");
+			}
+		});
+	}
+	
+	private void resetValues() {
+		cbTools.getItems().addAll(TOOL_TYPES);
+		cbTools.setValue("Circle");
+		sSize.setValue(50);
+		sWidth.setValue(50);
+		sHeight.setValue(50);
+		sRadius.setValue(50);
 	}
 }

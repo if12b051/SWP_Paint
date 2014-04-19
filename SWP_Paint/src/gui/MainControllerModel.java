@@ -58,55 +58,5 @@ public class MainControllerModel {
 		this.radius = radius;
 	}
 	
-//	ChangeListener<Boolean> invalidateChange = new ChangeListener<Boolean>() {
-//		@Override
-//		public void changed(ObservableValue<? extends Boolean> observable,
-//				Boolean oldValue, Boolean newValue) {
-//			disableChange.invalidate();
-//		}
-//	};
-//	
-//	private BooleanBinding disableChange = new BooleanBinding() {
-//		@Override
-//		protected boolean computeValue() {
-//			if((checkHour.get() || checkMinute.get() || checkSecond.get()) && (radioInc.get() || radioDec.get()))
-//				return false;
-//			else
-//				return true;
-//		}
-//	};
-//	
-//	public MainControllerModel() {
-//		checkHour.addListener(invalidateChange);
-//		checkMinute.addListener(invalidateChange);
-//		checkSecond.addListener(invalidateChange);
-//		radioInc.addListener(invalidateChange);
-//		radioDec.addListener(invalidateChange);
-//	}
-//	
-//	public BooleanProperty radioIncProperty() {
-//		return radioInc;
-//	}
-//
-//	public BooleanProperty radioDecProperty() {
-//		return radioDec;
-//	}
-//	
-//	public BooleanProperty checkHourProperty() {
-//		return checkHour;
-//	}
-//
-//	public BooleanProperty checkMinuteProperty() {
-//		return checkMinute;
-//	}
-//	
-//	public BooleanProperty checkSecondProperty() {
-//		return checkSecond;
-//	}
-//	
-//	public BooleanBinding disableChangeBinding() {
-//		return disableChange;
-//	}
-	
 	
 }

@@ -9,19 +9,20 @@
 <AnchorPane prefHeight="484.0" prefWidth="627.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.MainController">
   <!-- TODO Add Nodes -->
   <children>
-    <SplitPane dividerPositions="0.7312" focusTraversable="true" prefHeight="484.0" prefWidth="558.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <SplitPane dividerPositions="0.7152" focusTraversable="true" prefHeight="484.0" prefWidth="558.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
           <children>
             <Pane fx:id="pCanvas" prefHeight="482.0" prefWidth="474.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
           </children>
         </AnchorPane>
-        <AnchorPane maxWidth="165.0" minHeight="0.0" minWidth="165.0" prefHeight="482.0" prefWidth="-1.0">
+        <AnchorPane maxWidth="175.0" minHeight="0.0" minWidth="175.0" prefHeight="482.0" prefWidth="-1.0">
           <children>
-            <ToolBar layoutX="0.0" layoutY="-1.0" prefWidth="165.0">
+            <ToolBar layoutX="0.0" layoutY="-1.0" prefWidth="175.0">
               <items>
                 <Button fx:id="bUndo" mnemonicParsing="false" onAction="#doUndo" text="Undo" />
                 <Button fx:id="bRedo" mnemonicParsing="false" onAction="#doRedo" text="Redo" />
+                <Button fx:id="bHelp" mnemonicParsing="false" text="Help" />
               </items>
             </ToolBar>
             <ComboBox id="cbShape" fx:id="cbTools" layoutX="68.0" layoutY="43.0" prefHeight="21.0" prefWidth="87.0">
@@ -38,17 +39,17 @@
             <Label layoutX="16.0" layoutY="108.0" text="Size" />
             <Label layoutX="16.0" layoutY="166.0" text="Width" />
             <Label layoutX="16.0" layoutY="195.0" text="Height" />
-            <Separator layoutX="1.0" layoutY="257.0" prefWidth="160.0" />
+            <Separator layoutX="1.0" layoutY="257.0" prefWidth="175.0" />
             <Label layoutX="16.0" layoutY="137.0" text="Radius" />
             <Button fx:id="bEdit" layoutX="16.0" layoutY="224.0" mnemonicParsing="false" onAction="#doEdit" prefWidth="54.0" text="Edit" />
             <Slider fx:id="sRadius" layoutX="64.0" layoutY="138.0" prefWidth="65.0" />
             <Slider fx:id="sWidth" layoutX="64.0" layoutY="167.0" prefWidth="65.0" />
-            <Slider fx:id="sLength" layoutX="64.0" layoutY="196.0" prefWidth="65.0" />
+            <Slider id="sLength" fx:id="sHeight" layoutX="64.0" layoutY="196.0" prefWidth="65.0" />
             <Slider id="sRadius" fx:id="sSize" layoutX="64.0" layoutY="109.0" prefWidth="65.0" />
-            <TextField fx:id="tfSize" layoutX="130.0" layoutY="105.0" prefWidth="29.000099999997474" />
-            <TextField fx:id="tfRadius" layoutX="130.0" layoutY="134.0" prefWidth="29.000099999997474" />
-            <TextField fx:id="tfWidth" layoutX="130.0" layoutY="163.0" prefWidth="29.000099999997474" />
-            <TextField fx:id="tfHeight" layoutX="130.0" layoutY="192.0" prefWidth="29.000099999997474" />
+            <Label fx:id="lblRadius" layoutX="134.0" layoutY="137.0" prefWidth="25.0" text="0" />
+            <Label id="lblRadius" fx:id="lblWidth" layoutX="134.0" layoutY="166.0" prefWidth="25.0" text="0" />
+            <Label id="lblRadius" fx:id="lblHeight" layoutX="134.0" layoutY="195.0" prefWidth="25.0" text="0" />
+            <Label id="lblRadius" fx:id="lblSize" layoutX="134.0" layoutY="107.0" prefWidth="25.0" text="0" />
           </children>
         </AnchorPane>
       </items>
