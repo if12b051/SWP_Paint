@@ -19,6 +19,21 @@ public class MainControllerModel {
 	private DoubleProperty width = new SimpleDoubleProperty();
 	private DoubleProperty size = new SimpleDoubleProperty();
 	
+//	public BooleanBinding disableCbToolsBinding = new BooleanBinding(String action) {
+//		
+//		@Override
+//		protected boolean computeValue() {
+//			if(!action.equals("draw")) {
+//				return true;
+//			}
+//			else {
+//				return false;
+//			}
+//		}
+//		
+//	}
+		
+	
 	public MainControllerModel() {
 		radius.addListener(new ChangeListener<String>()  {
 			@Override

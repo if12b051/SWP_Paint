@@ -50,14 +50,14 @@ import javafx.util.converter.DoubleStringConverter;
 public class MainController implements Initializable{
 	
 	private final String[] TOOL_TYPES = {"Circle", "Ellipse", "Triangle", "Square", "Rectangle", "Pencil"};
-	public final static int canvasWidth=474, canvasHeight=482;
+	public final static int CANVAS_WIDTH=474, CANVAS_HEIGHT=482;
 	
 	/* GUI Objects */
 	@FXML private ComboBox<String> cbTools;
 	@FXML private Slider sSize, sWidth, sHeight, sRadius;
 	@FXML private Label lblRadius, lblSize, lblWidth, lblHeight;
 	@FXML private Pane pCanvas, pColorPicker;
-	@FXML private Button bClear, bGroup, bShape, bEdit, bUndo, bRedo, bHelp;
+	@FXML private Button bClear, bGroup, bDraw, bEdit, bUndo, bRedo, bHelp;
 	private final ColorPicker colorPicker = new ColorPicker();
 	private GraphicsContext artBoard;
 	private Canvas canvas;
@@ -78,15 +78,15 @@ public class MainController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		/* initialize bindings and model */
 		model = new MainControllerModel();
+//		cbTools.disableProperty().bind(model.disableCbToolsBinding(preferences.get("action").getStringPreference()));
 		
 		
 		/* Initialize GUI, set values, create listeners */
 		resetValues();
 		createListeners();
-		resetValues();
 		
 		/* initialize canvas */
-		canvas = new Canvas(canvasWidth,canvasHeight);
+		canvas = new Canvas(CANVAS_WIDTH,CANVAS_HEIGHT);
 		artBoard = canvas.getGraphicsContext2D();
         drawShapes(artBoard); //test
         
@@ -149,12 +149,31 @@ public class MainController implements Initializable{
 				}
 				putCmdOnStack(command);
 			}
-        	
         });
+        setPreferences("draw");
 	}
 	
 	private void setPreferences(String newAction) {
 		preferences.put("action", new Preference(newAction));
+		bDraw.getStyleClass().remove("btn_selected");
+		bEdit.getStyleClass().remove("btn_selected");
+		bGroup.getStyleClass().remove("btn_selected");
+		bClear.getStyleClass().remove("btn_selected");
+		switch(newAction)
+		{
+		case "draw":
+			bDraw.getStyleClass().add("btn_selected");
+			break;
+		case "edit":
+			bEdit.getStyleClass().add("btn_selected");
+			break;
+		case "group":
+			bGroup.getStyleClass().add("btn_selected");
+			break;
+		case "clear":
+			bClear.getStyleClass().add("btn_selected");
+			break;
+		}
 		preferences.put("tool", new Preference(cbTools.getValue()));
 		preferences.put("paint", new Preference(colorPicker.getValue()));
 		preferences.put("size", new Preference(sSize.getValue()));

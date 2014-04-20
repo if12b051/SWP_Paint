@@ -13,7 +13,7 @@ public class ClearAll implements Command{
 	
 	@Override
 	public void execute() {
-		curArtBoard.clearRect(0, 0, MainController.canvasWidth, MainController.canvasHeight);
+		curArtBoard.clearRect(0, 0, MainController.CANVAS_WIDTH, MainController.CANVAS_HEIGHT);
 	}
 
 	@Override
