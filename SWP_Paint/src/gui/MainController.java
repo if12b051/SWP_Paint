@@ -11,11 +11,13 @@ import commands.ClearAll;
 import commands.Command;
 import commands.CreateEllipse;
 import commands.CreateRectangle;
+import commands.CreateTriangle;
 import commands.EditShape;
 import commands.GroupShapes;
 import shapes.CloneFactory;
 import shapes.EllipseShape;
 import shapes.RectangleShape;
+import shapes.Shape;
 import shapes.TriangleShape;
 import application.Preference;
 import javafx.beans.binding.Bindings;
@@ -42,6 +44,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
@@ -59,8 +62,6 @@ public class MainController implements Initializable{
 	@FXML private Pane pCanvas, pColorPicker;
 	@FXML private Button bClear, bGroup, bDraw, bEdit, bUndo, bRedo, bHelp;
 	private final ColorPicker colorPicker = new ColorPicker();
-	private GraphicsContext artBoard;
-	private Canvas canvas;
 	private MainControllerModel model;
 	
 	/* important general objects */
@@ -68,6 +69,7 @@ public class MainController implements Initializable{
     private Stack<Command> redo;
     private Map<String, Preference> preferences; //"action", "tool", "paint", "size", "radius", "width", "height"
     private CloneFactory cloneFactory;
+    private ArrayList<Shape> drawnGeometry;
     
     /* geometry prototypes */
 	private EllipseShape ellipsePrototype;
@@ -78,17 +80,12 @@ public class MainController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		/* initialize bindings and model */
 		model = new MainControllerModel();
-//		cbTools.disableProperty().bind(model.disableCbToolsBinding(preferences.get("action").getStringPreference()));
-		
+		drawnGeometry = new ArrayList<Shape>();
 		
 		/* Initialize GUI, set values, create listeners */
+		cbTools.getItems().addAll(TOOL_TYPES);
 		resetValues();
 		createListeners();
-		
-		/* initialize canvas */
-		canvas = new Canvas(CANVAS_WIDTH,CANVAS_HEIGHT);
-		artBoard = canvas.getGraphicsContext2D();
-        drawShapes(artBoard); //test
         
         /* initalize general objects */
         undo = new Stack<Command>();
@@ -101,13 +98,11 @@ public class MainController implements Initializable{
         rectanglePrototype = new RectangleShape();
         
         /* initialize colorpicker and canvas */
-        colorPicker.setValue(Color.AZURE);
+        colorPicker.setValue(Color.BEIGE);
         pColorPicker.getChildren().addAll(colorPicker);
-		pCanvas.getChildren().add(canvas);
         
         /* add eventListeners to canvas for: CLICKED and DRAGGED*/
-        canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-
+        pCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				double mouseX, mouseY;
@@ -118,27 +113,34 @@ public class MainController implements Initializable{
 				
 				/* get current action */
 				curAction = preferences.get("action").getStringPreference();
-				artBoard.save();
 				switch(curAction) {
 				case "draw":
 					switch(preferences.get("tool").getStringPreference()) 
 					{
 						case "Circle":
 						case "Ellipse":
-							EllipseShape newEllipse = (EllipseShape) cloneFactory.getClone(ellipsePrototype);
-							command = new CreateEllipse(preferences, mouseX, mouseY, newEllipse, artBoard);
+							EllipseShape newEllipse = new EllipseShape();
+							drawnGeometry.add(newEllipse);
+							command = new CreateEllipse(preferences, mouseX, mouseY, newEllipse, pCanvas);
 							break;
 						case "Triangle":
+							TriangleShape newTriangle = new TriangleShape();
+							drawnGeometry.add(newTriangle);
+							command = new CreateTriangle(preferences, mouseX, mouseY, newTriangle, pCanvas);
 							break;
 						case "Rectangle":
 						case "Square":
-							RectangleShape newRectangle = (RectangleShape) cloneFactory.getClone(rectanglePrototype);
-							command = new CreateRectangle(preferences, mouseX, mouseY, newRectangle, artBoard);
+							RectangleShape newRectangle = new RectangleShape();
+							drawnGeometry.add(newRectangle);
+							command = new CreateRectangle(preferences, mouseX, mouseY, newRectangle, pCanvas);
+//							RectangleShape newRectangle = (RectangleShape) cloneFactory.getClone(rectanglePrototype);
+							//command = new CreateRectangle(preferences, mouseX, mouseY, newRectangle, artBoard);
 							break;
 						case "Pencil":
 							break;
 					}
 					command.execute();
+					
 					break;
 				case "edit":
 					//command = new EditShape(preferences, mouseX, mouseY);
@@ -151,6 +153,17 @@ public class MainController implements Initializable{
 			}
         });
         setPreferences("draw");
+        
+        Circle circle = new Circle(500, 200, 100);
+        
+//        circle.setOnMouseMoved(new EventHandler<MouseEvent>() {
+//            public void handle(MouseEvent event) {
+//                circle.setCenterX(event.getX());
+//                ellipse.setCenterY(event.getY());
+//            }
+//        });
+        
+        pCanvas.getChildren().add(circle);
 	}
 	
 	private void setPreferences(String newAction) {
@@ -182,29 +195,6 @@ public class MainController implements Initializable{
 		preferences.put("height", new Preference(sHeight.getValue()));
 	}
 	
-	private void drawShapes(GraphicsContext gc) {
-        gc.setFill(Color.GREEN);
-        gc.setStroke(Color.BLUE);
-        gc.setLineWidth(5);
-        gc.strokeLine(40, 10, 10, 40);
-        gc.fillOval(10, 60, 30, 30);
-        gc.strokeOval(60, 60, 30, 30);
-        gc.fillRoundRect(110, 60, 30, 30, 10, 10);
-        gc.strokeRoundRect(160, 60, 30, 30, 10, 10);
-        gc.fillArc(10, 110, 30, 30, 45, 240, ArcType.OPEN);
-        gc.fillArc(60, 110, 30, 30, 45, 240, ArcType.CHORD);
-        gc.fillArc(110, 110, 30, 30, 45, 240, ArcType.ROUND);
-        gc.strokeArc(10, 160, 30, 30, 45, 240, ArcType.OPEN);
-        gc.strokeArc(60, 160, 30, 30, 45, 240, ArcType.CHORD);
-        gc.strokeArc(110, 160, 30, 30, 45, 240, ArcType.ROUND);
-        gc.fillPolygon(new double[]{10, 40, 10, 40},
-                       new double[]{210, 210, 240, 240}, 4);
-        gc.strokePolygon(new double[]{60, 90, 60, 90},
-                         new double[]{210, 210, 240, 240}, 4);
-        gc.strokePolyline(new double[]{110, 140, 110, 140},
-                          new double[]{210, 210, 240, 240}, 4);
-    }
-	
 	@FXML public void doDraw(ActionEvent event){
 		String action = "draw";
 		System.out.println("Action: " + action);
@@ -221,7 +211,7 @@ public class MainController implements Initializable{
 		String action = "clear";
 		System.out.println("Action: " + action);
 		setPreferences(action);
-		Command command = new ClearAll(artBoard);
+		Command command = new ClearAll(pCanvas);
 		command.execute();
 		putCmdOnStack(command);
 	}
@@ -311,7 +301,6 @@ public class MainController implements Initializable{
 	}
 	
 	private void resetValues() {
-		cbTools.getItems().addAll(TOOL_TYPES);
 		cbTools.setValue("Circle");
 		sSize.setValue(50);
 		sWidth.setValue(50);
