@@ -4,10 +4,11 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 public class RectangleShape implements Shape{
-	private Rectangle rectangle = new Rectangle();
+	private Rectangle rectangle;
 	
 	public RectangleShape() {
 		System.out.println("Rectangle created.");
+		rectangle = new Rectangle();
 	}
 	
 	@Override
@@ -20,7 +21,6 @@ public class RectangleShape implements Shape{
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
-		
 		return newRectangle;
 	}
 

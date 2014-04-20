@@ -11,9 +11,9 @@ public class CreateTriangle implements Command{
 	private TriangleShape newTriangle;
 	private Pane artBoard;
 	
-	public CreateTriangle(Map<String, Preference> preferences, double mouseX, double mouseY, TriangleShape rectangle, Pane artBoard) {
+	public CreateTriangle(Map<String, Preference> preferences, double mouseX, double mouseY, TriangleShape triangle, Pane artBoard) {
 		this.artBoard = artBoard;
-		this.newTriangle = rectangle;
+		this.newTriangle = triangle;
 		newTriangle.getTriangle().getPoints().addAll(new Double[]{
 				mouseX + preferences.get("width").getDoublePreference()/2, mouseY + preferences.get("height").getDoublePreference()/2,
 				mouseX - preferences.get("width").getDoublePreference()/2, mouseY + preferences.get("height").getDoublePreference()/2,

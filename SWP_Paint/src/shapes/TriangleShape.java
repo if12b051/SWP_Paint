@@ -8,7 +8,7 @@ public class TriangleShape implements Shape {
 	
 	public TriangleShape() {
 		System.out.println("Triangle created.");
-		setTriangle(new Polygon());
+		triangle = new Polygon();
 	}
 	
 	@Override
