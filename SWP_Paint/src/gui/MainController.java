@@ -70,6 +70,7 @@ public class MainController implements Initializable{
     public static Map<String, Preference> preferences; //"action", "tool", "paint", "size", "radius", "width", "height"
     private CloneFactory cloneFactory;
     private ArrayList<Shape> drawnGeometry;
+    private ObserverList mediatorList;
     
     /* geometry prototypes */
 	private EllipseShape ellipsePrototype;
@@ -86,12 +87,14 @@ public class MainController implements Initializable{
 		cbTools.getItems().addAll(TOOL_TYPES);
 		resetValues();
 		createListeners();
+		
         
         /* initalize general objects */
         undo = new Stack<Command>();
         redo = new Stack<Command>();
         preferences = new HashMap<String, Preference>();
         cloneFactory = new CloneFactory();
+        mediatorList = new ObserverList();
         
         /* initialize prototypes */
         ellipsePrototype = new EllipseShape();
@@ -179,7 +182,13 @@ public class MainController implements Initializable{
 	}
 	
 	private void setPreferences(String newAction) {
-		preferences.put("action", new Preference(newAction));
+		mediatorList.notifyObserver();
+		
+		/* set action if "keep"(keep old value) is not chosen */
+		if(!newAction.equals("keep"))
+			preferences.put("action", new Preference(newAction));
+		
+		/* set right button color/style here */
 		bDraw.getStyleClass().remove("btn_selected");
 		bEdit.getStyleClass().remove("btn_selected");
 		bGroup.getStyleClass().remove("btn_selected");
@@ -198,7 +207,11 @@ public class MainController implements Initializable{
 		case "clear":
 			bClear.getStyleClass().add("btn_selected");
 			break;
+		case "keep":
+		default:
 		}
+		
+		/* set other preferences */
 		preferences.put("tool", new Preference(cbTools.getValue()));
 		preferences.put("paint", new Preference(colorPicker.getValue()));
 		preferences.put("size", new Preference(sSize.getValue()));
@@ -277,7 +290,7 @@ public class MainController implements Initializable{
 			public void changed(ObservableValue<? extends String> observable,
 					String oldValue, String newValue) {
 				lblRadius.setText(Integer.toString((int) Double.parseDouble(newValue)));
-				setPreferences("draw");
+				setPreferences("keep");
 			}
 		});
 		
@@ -287,7 +300,7 @@ public class MainController implements Initializable{
 			public void changed(ObservableValue<? extends String> observable,
 					String oldValue, String newValue) {
 				lblSize.setText(Integer.toString((int) Double.parseDouble(newValue)));
-				setPreferences("draw");
+				setPreferences("keep");
 			}
 		});
 		
@@ -297,7 +310,7 @@ public class MainController implements Initializable{
 			public void changed(ObservableValue<? extends String> observable,
 					String oldValue, String newValue) {
 				lblWidth.setText(Integer.toString((int) Double.parseDouble(newValue)));
-				setPreferences("draw");
+				setPreferences("keep");
 			}
 		});
 		
@@ -307,7 +320,23 @@ public class MainController implements Initializable{
 			public void changed(ObservableValue<? extends String> observable,
 					String oldValue, String newValue) {
 				lblHeight.setText(Integer.toString((int) Double.parseDouble(newValue)));
-				setPreferences("draw");
+				setPreferences("keep");
+			}
+		});
+		
+		cbTools.valueProperty().addListener(new ChangeListener<String>()  {
+			@Override
+			public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+				setPreferences("keep");
+			}
+		});
+		
+		colorPicker.valueProperty().addListener(new ChangeListener<Paint>()  {
+			@Override
+			public void changed(ObservableValue<? extends Paint> observable,
+					Paint oldValue, Paint newValue) {
+				setPreferences("keep");
 			}
 		});
 	}
