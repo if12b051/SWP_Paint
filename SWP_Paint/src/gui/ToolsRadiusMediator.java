@@ -6,7 +6,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-public class ToolsRadiusMediator {
+public class ToolsRadiusMediator implements Mediator {
 	private StringProperty curTool = new SimpleStringProperty();
 	
 	private ChangeListener<String> invalidateSlider = new ChangeListener<String>() {
@@ -20,7 +20,7 @@ public class ToolsRadiusMediator {
 	private BooleanBinding disableSlider = new BooleanBinding() {
 		@Override
 		protected boolean computeValue() {
-			if(curTool.get().equals("Ellipse") || curTool.get().equals("Circle"))
+			if((curTool.get().equals("Ellipse") || curTool.get().equals("Circle")) && MainController.preferences.get("action").getStringPreference().equals("draw"))
 				return false;
 			else
 				return true;
@@ -38,8 +38,9 @@ public class ToolsRadiusMediator {
 	public void setCurTool(StringProperty curTool) {
 		this.curTool = curTool;
 	}
-
-	public BooleanBinding getDisableSlider() {
+	
+	@Override
+	public BooleanBinding getDisable() {
 		return disableSlider;
 	}
 	

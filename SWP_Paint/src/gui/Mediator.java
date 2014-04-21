@@ -1,5 +1,7 @@
 package gui;
 
-public class Mediator {
+import javafx.beans.binding.BooleanBinding;
 
+public interface Mediator {
+	public BooleanBinding getDisable();
 }

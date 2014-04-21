@@ -52,56 +52,31 @@ import javafx.util.converter.DoubleStringConverter;
 
 public class MainController implements Initializable{
 	
-	private final String[] TOOL_TYPES = {"Circle", "Ellipse", "Triangle", "Square", "Rectangle", "Pencil"};
-	public final static int CANVAS_WIDTH=474, CANVAS_HEIGHT=482;
-	
-	/* GUI Objects */
-	@FXML private ComboBox<String> cbTools;
-	@FXML private Slider sSize, sWidth, sHeight, sRadius, sResize;
-	@FXML private Label lblRadius, lblSize, lblWidth, lblHeight, lblResize;
-	@FXML private Pane pCanvas, pColorPicker, pControl;
-	@FXML private Button bClear, bGroup, bDraw, bEdit, bUndo, bRedo, bHelp;
-	private final ColorPicker colorPicker = new ColorPicker();
-	private MainControllerModel model;
-	
-	/* important general objects */
-	private Stack<Command> undo;
-    private Stack<Command> redo;
-    public static Map<String, Preference> preferences; //"action", "tool", "paint", "size", "radius", "width", "height"
-    private CloneFactory cloneFactory;
-    private ArrayList<Shape> drawnGeometry;
-    
-    /* geometry prototypes */
-	private EllipseShape ellipsePrototype;
-	private RectangleShape rectanglePrototype;
-	private TriangleShape trianglePrototype;
-	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		/* initialize bindings and model */
-		model = new MainControllerModel();
+		/* Constructors */
 		drawnGeometry = new ArrayList<Shape>();
+		mediatorList = new ArrayList<Mediator>();
+		preferences = new HashMap<String, Preference>();
+		undo = new Stack<Command>();
+        redo = new Stack<Command>();
+        cloneFactory = new CloneFactory();
 		
 		/* Initialize GUI, set values, create listeners */
 		cbTools.getItems().addAll(TOOL_TYPES);
-		resetValues();
-		createListeners();
+		sResize.setMax(200);
+		
+		setPreferences("draw");
+		
+        createListeners();
+        resetValues();
         
-        /* initalize general objects */
-        undo = new Stack<Command>();
-        redo = new Stack<Command>();
-        preferences = new HashMap<String, Preference>();
-        cloneFactory = new CloneFactory();
-        
-        /* initialize prototypes */
-        ellipsePrototype = new EllipseShape();
-        rectanglePrototype = new RectangleShape();
         
         /* initialize colorpicker and canvas */
         colorPicker.setValue(Color.BEIGE);
         pColorPicker.getChildren().addAll(colorPicker);
         
-        /* add eventListeners to canvas for: CLICKED and DRAGGED*/
+        /* add eventListeners to canvas for: CLICKED and DRAGGED */
         pCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -164,7 +139,6 @@ public class MainController implements Initializable{
 				putCmdOnStack(command);
 			}
         });
-        setPreferences("draw");
 	}
 	
 	private void setPreferences(String newAction) {
@@ -173,9 +147,9 @@ public class MainController implements Initializable{
 		if(!newAction.equals("keep")) {
 			preferences.put("action", new Preference(newAction));
 		} 
-//		else {
-//			newAction = preferences.get("action").getStringPreference();
-//		}
+		else {
+			newAction = preferences.get("action").getStringPreference();
+		}
 			
 		/* set right button color/style here */
 		bDraw.getStyleClass().remove("btn_selected");
@@ -208,6 +182,11 @@ public class MainController implements Initializable{
 		preferences.put("width", new Preference(sWidth.getValue()));
 		preferences.put("height", new Preference(sHeight.getValue()));
 		preferences.put("resize", new Preference(sResize.getValue()));
+		
+		/* notify mediators of new preferences, and let them adjust if necessary */
+		for(Mediator m : mediatorList) {
+			m.getDisable().invalidate();
+		}
 	}
 	
 	@FXML public void doDraw(ActionEvent event){
@@ -274,6 +253,7 @@ public class MainController implements Initializable{
 	private void createListeners() {
 		StringConverter<? extends Number> converter = new DoubleStringConverter();
 		
+		resetValues();
 		Bindings.bindBidirectional(lblRadius.textProperty(), sRadius.valueProperty(), (StringConverter<Number>)converter);
 		lblRadius.textProperty().addListener(new ChangeListener<String>()  {
 			@Override
@@ -339,23 +319,43 @@ public class MainController implements Initializable{
 				setPreferences("keep");
 			}
 		});
+		/* here so double values are not shown */
+		resetLabels();
 		
 		/* initialize mediators */
 		ToolsSizeMediator tsMediator = new ToolsSizeMediator();
 		tsMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
-		sSize.disableProperty().bind(tsMediator.getDisableSlider());
+		sSize.disableProperty().bind(tsMediator.getDisable());
 		
 		ToolsRadiusMediator trMediator = new ToolsRadiusMediator();
 		trMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
-		sRadius.disableProperty().bind(trMediator.getDisableSlider());
+		sRadius.disableProperty().bind(trMediator.getDisable());
 		
 		ToolsWidthMediator twMediator = new ToolsWidthMediator();
 		twMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
-		sWidth.disableProperty().bind(twMediator.getDisableSlider());
+		sWidth.disableProperty().bind(twMediator.getDisable());
 		
 		ToolsHeightMediator thMediator = new ToolsHeightMediator();
 		thMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
-		sHeight.disableProperty().bind(thMediator.getDisableSlider());
+		sHeight.disableProperty().bind(thMediator.getDisable());
+		
+		ToolsResizeMediator trsMediator = new ToolsResizeMediator();
+		trsMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
+		sResize.disableProperty().bind(trsMediator.getDisable());
+		
+		ToolsButtonsMediator tbMediator = new ToolsButtonsMediator();
+		cbTools.disableProperty().bind(tbMediator.getDisable());
+		
+		ToolsButtonsMediator tcMediator = new ToolsButtonsMediator();
+		colorPicker.disableProperty().bind(tcMediator.getDisable());
+		
+		mediatorList.add(tsMediator);
+		mediatorList.add(trMediator);
+		mediatorList.add(twMediator);
+		mediatorList.add(thMediator);
+		mediatorList.add(trsMediator);
+		mediatorList.add(tbMediator);
+		mediatorList.add(tcMediator);
 	}
 	
 	private void resetValues() {
@@ -364,6 +364,34 @@ public class MainController implements Initializable{
 		sWidth.setValue(50);
 		sHeight.setValue(50);
 		sRadius.setValue(50);
-		sResize.setValue(50);
+		sResize.setValue(100);
 	}
+	
+	private void resetLabels() {
+		lblRadius.setText("50");
+		lblHeight.setText("50");
+		lblWidth.setText("50");
+		lblSize.setText("50");
+		lblResize.setText("100");
+	}
+	
+	private final String[] TOOL_TYPES = {"Circle", "Ellipse", "Triangle", "Square", "Rectangle", "Pencil"};
+	public final static int CANVAS_WIDTH=474, CANVAS_HEIGHT=482;
+	
+	/* GUI Objects */
+	@FXML private ComboBox<String> cbTools;
+	@FXML private Slider sSize, sWidth, sHeight, sRadius, sResize;
+	@FXML private Label lblRadius, lblSize, lblWidth, lblHeight, lblResize;
+	@FXML private Pane pCanvas, pColorPicker, pControl;
+	@FXML private Button bClear, bGroup, bDraw, bEdit, bUndo, bRedo, bHelp;
+	private final ColorPicker colorPicker = new ColorPicker();
+	private MainControllerModel model;
+	
+	/* important general objects */
+	private Stack<Command> undo;
+    private Stack<Command> redo;
+    public static Map<String, Preference> preferences; //"action", "tool", "paint", "size", "radius", "width", "height"
+    private CloneFactory cloneFactory;
+    private ArrayList<Shape> drawnGeometry;
+    private ArrayList<Mediator> mediatorList;
 }
