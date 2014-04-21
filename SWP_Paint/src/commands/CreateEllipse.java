@@ -5,7 +5,10 @@ import gui.MainController;
 import java.util.ArrayList;
 import java.util.Map;
 
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
@@ -48,14 +51,35 @@ public class CreateEllipse implements Command{
 				switch(curAction){
 				case "group":
 					System.out.println("Ellipse die zu einer Gruppe hinzugefügt werden will");
-					Command command = null;
+					newEllipse.group = true;
 					
-					command = new GroupShapes();
+					new GroupShapes().execute(newEllipse.getEllipse());
 					break;
 				case "edit":
-					newEllipse.getEllipse().setCenterX(event.getSceneX());
-					newEllipse.getEllipse().setCenterY(event.getSceneY());
 					
+					System.out.println("Group: " + newEllipse.group);
+					
+					if(newEllipse.group) {
+						
+						ArrayList<Node> group = GroupShapes.getGroup();
+						
+						double differenceX = 0;
+						double differenceY = 0;
+						
+						differenceX = (event.getSceneX() - newEllipse.getEllipse().getCenterX());
+						differenceY = (event.getSceneY() - newEllipse.getEllipse().getCenterY());
+						
+						for(int i = 0;i<group.size(); i++) {
+							if(newEllipse.getEllipse().toString()!=group.get(i).toString()) {
+								group.get(i).setLayoutX(differenceX);
+								group.get(i).setLayoutY(differenceY);
+							}
+						}
+					}
+					else {
+						newEllipse.getEllipse().setCenterX(event.getSceneX());
+						newEllipse.getEllipse().setCenterY(event.getSceneY());
+					}	
 					break;
 				}
 				
@@ -63,7 +87,6 @@ public class CreateEllipse implements Command{
 			 
 		 });
 		
-
 	}
 
 	@Override

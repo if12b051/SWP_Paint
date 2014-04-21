@@ -8,10 +8,12 @@ import javafx.scene.shape.Ellipse;
 public class EllipseShape implements Shape {
 
 	private Ellipse ellipse;
+	public boolean group;
 	
 	public EllipseShape() {
 		System.out.println("Ellipse created.");
-		ellipse = new Ellipse();;
+		ellipse = new Ellipse();
+		group = false;
 	}
 	
 	@Override

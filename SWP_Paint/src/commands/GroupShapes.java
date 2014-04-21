@@ -1,10 +1,16 @@
 package commands;
 
+import java.util.ArrayList;
+
+import javafx.collections.ObservableList;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.shape.Ellipse;
 
 public class GroupShapes implements Command{
-	private Group group = new Group();
+	//private static Group group = new Group();
+	//private static ObservableList<Node> shapeGroups;
+	private static ArrayList<Node> group = new ArrayList<Node>();
 	
 	public GroupShapes() {
 		
@@ -15,7 +21,7 @@ public class GroupShapes implements Command{
 	}
 	
 	public void execute(Ellipse e) {
-		group.getChildren().add(e);
+		group.add(e);
 	}
 
 	@Override
@@ -23,7 +29,7 @@ public class GroupShapes implements Command{
 		// TODO Auto-generated method stub
 	}
 	
-	public Group getGroup() {
+	public static ArrayList getGroup() {
 		return group;
 	}
 	
