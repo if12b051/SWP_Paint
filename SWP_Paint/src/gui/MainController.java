@@ -67,7 +67,7 @@ public class MainController implements Initializable{
 	/* important general objects */
 	private Stack<Command> undo;
     private Stack<Command> redo;
-    public static Map<String, Preference> preferences; //"action", "tool", "paint", "size", "radius", "width", "height"
+    private Map<String, Preference> preferences; //"action", "tool", "paint", "size", "radius", "width", "height"
     private CloneFactory cloneFactory;
     private ArrayList<Shape> drawnGeometry;
     
@@ -144,18 +144,6 @@ public class MainController implements Initializable{
 					break;
 				case "edit":
 					//command = new EditShape(preferences, mouseX, mouseY);
-					break;
-				case "group":
-					/*for(int i=0; i<drawnGeometry.size(); i++){
-						System.out.println(drawnGeometry.get(i).getClass());
-						String classString = drawnGeometry.get(i).getClass().toString();
-						String[] splitArray;
-						splitArray = classString.split(".");
-						if(splitArray[1] == "EllipseShape"){
-							drawnGeometry.get(i);
-						}	
-					}*/
-					
 					break;
 				default:
 					//just cleared or not set yet

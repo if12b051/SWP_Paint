@@ -33,5 +33,4 @@ public class TriangleShape implements Shape {
 	public void setTriangle(Polygon triangle) {
 		this.triangle = triangle;
 	}
-
 }
