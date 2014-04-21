@@ -207,6 +207,7 @@ public class MainController implements Initializable{
 		preferences.put("radius", new Preference(sRadius.getValue()));
 		preferences.put("width", new Preference(sWidth.getValue()));
 		preferences.put("height", new Preference(sHeight.getValue()));
+		preferences.put("resize", new Preference(sResize.getValue()));
 	}
 	
 	@FXML public void doDraw(ActionEvent event){
@@ -313,6 +314,16 @@ public class MainController implements Initializable{
 			}
 		});
 		
+		Bindings.bindBidirectional(lblResize.textProperty(), sResize.valueProperty(), (StringConverter<Number>)converter);
+		lblResize.textProperty().addListener(new ChangeListener<String>()  {
+			@Override
+			public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+				lblResize.setText(Integer.toString((int) Double.parseDouble(newValue)));
+				setPreferences("keep");
+			}
+		});
+		
 		cbTools.valueProperty().addListener(new ChangeListener<String>()  {
 			@Override
 			public void changed(ObservableValue<? extends String> observable,
@@ -353,5 +364,6 @@ public class MainController implements Initializable{
 		sWidth.setValue(50);
 		sHeight.setValue(50);
 		sRadius.setValue(50);
+		sResize.setValue(50);
 	}
 }
