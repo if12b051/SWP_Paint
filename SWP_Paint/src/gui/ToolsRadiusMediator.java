@@ -6,7 +6,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-public class ToolsSizeMediator {
+public class ToolsRadiusMediator {
 	private StringProperty curTool = new SimpleStringProperty();
 	
 	private ChangeListener<String> invalidateSlider = new ChangeListener<String>() {
@@ -20,14 +20,14 @@ public class ToolsSizeMediator {
 	private BooleanBinding disableSlider = new BooleanBinding() {
 		@Override
 		protected boolean computeValue() {
-			if((curTool.get().equals("Pencil")))
+			if(curTool.get().equals("Ellipse") || curTool.get().equals("Circle"))
 				return false;
 			else
 				return true;
 		}
 	};
 	
-	public ToolsSizeMediator() {
+	public ToolsRadiusMediator() {
 		curTool.addListener(invalidateSlider);
 	}
 

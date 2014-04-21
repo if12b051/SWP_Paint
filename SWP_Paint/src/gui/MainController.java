@@ -57,9 +57,9 @@ public class MainController implements Initializable{
 	
 	/* GUI Objects */
 	@FXML private ComboBox<String> cbTools;
-	@FXML private Slider sSize, sWidth, sHeight, sRadius;
-	@FXML private Label lblRadius, lblSize, lblWidth, lblHeight;
-	@FXML private Pane pCanvas, pColorPicker;
+	@FXML private Slider sSize, sWidth, sHeight, sRadius, sResize;
+	@FXML private Label lblRadius, lblSize, lblWidth, lblHeight, lblResize;
+	@FXML private Pane pCanvas, pColorPicker, pControl;
 	@FXML private Button bClear, bGroup, bDraw, bEdit, bUndo, bRedo, bHelp;
 	private final ColorPicker colorPicker = new ColorPicker();
 	private MainControllerModel model;
@@ -70,7 +70,6 @@ public class MainController implements Initializable{
     public static Map<String, Preference> preferences; //"action", "tool", "paint", "size", "radius", "width", "height"
     private CloneFactory cloneFactory;
     private ArrayList<Shape> drawnGeometry;
-    private ObserverList mediatorList;
     
     /* geometry prototypes */
 	private EllipseShape ellipsePrototype;
@@ -87,14 +86,12 @@ public class MainController implements Initializable{
 		cbTools.getItems().addAll(TOOL_TYPES);
 		resetValues();
 		createListeners();
-		
         
         /* initalize general objects */
         undo = new Stack<Command>();
         redo = new Stack<Command>();
         preferences = new HashMap<String, Preference>();
         cloneFactory = new CloneFactory();
-        mediatorList = new ObserverList();
         
         /* initialize prototypes */
         ellipsePrototype = new EllipseShape();
@@ -168,26 +165,18 @@ public class MainController implements Initializable{
 			}
         });
         setPreferences("draw");
-        
-        Circle circle = new Circle(500, 200, 100);
-        
-//        circle.setOnMouseMoved(new EventHandler<MouseEvent>() {
-//            public void handle(MouseEvent event) {
-//                circle.setCenterX(event.getX());
-//                ellipse.setCenterY(event.getY());
-//            }
-//        });
-        
-        pCanvas.getChildren().add(circle);
 	}
 	
 	private void setPreferences(String newAction) {
-		mediatorList.notifyObserver();
 		
 		/* set action if "keep"(keep old value) is not chosen */
-		if(!newAction.equals("keep"))
+		if(!newAction.equals("keep")) {
 			preferences.put("action", new Preference(newAction));
-		
+		} 
+//		else {
+//			newAction = preferences.get("action").getStringPreference();
+//		}
+			
 		/* set right button color/style here */
 		bDraw.getStyleClass().remove("btn_selected");
 		bEdit.getStyleClass().remove("btn_selected");
@@ -339,6 +328,23 @@ public class MainController implements Initializable{
 				setPreferences("keep");
 			}
 		});
+		
+		/* initialize mediators */
+		ToolsSizeMediator tsMediator = new ToolsSizeMediator();
+		tsMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
+		sSize.disableProperty().bind(tsMediator.getDisableSlider());
+		
+		ToolsRadiusMediator trMediator = new ToolsRadiusMediator();
+		trMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
+		sRadius.disableProperty().bind(trMediator.getDisableSlider());
+		
+		ToolsWidthMediator twMediator = new ToolsWidthMediator();
+		twMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
+		sWidth.disableProperty().bind(twMediator.getDisableSlider());
+		
+		ToolsHeightMediator thMediator = new ToolsHeightMediator();
+		thMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
+		sHeight.disableProperty().bind(thMediator.getDisableSlider());
 	}
 	
 	private void resetValues() {
