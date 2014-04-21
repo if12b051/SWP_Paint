@@ -18,5 +18,4 @@ public class EditShape implements Command{
 		// TODO Auto-generated method stub
 	}
 
-
 }
