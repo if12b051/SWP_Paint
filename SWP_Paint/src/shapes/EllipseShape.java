@@ -1,5 +1,7 @@
 package shapes;
 
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Ellipse;
 
@@ -9,7 +11,7 @@ public class EllipseShape implements Shape {
 	
 	public EllipseShape() {
 		System.out.println("Ellipse created.");
-		ellipse = new Ellipse();
+		ellipse = new Ellipse();;
 	}
 	
 	@Override

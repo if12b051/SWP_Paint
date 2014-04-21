@@ -31,4 +31,5 @@ public class RectangleShape implements Shape{
 	public void setRectangle(Rectangle rectangle) {
 		this.rectangle = rectangle;
 	}
+
 }
