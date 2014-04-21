@@ -36,5 +36,4 @@ public class EllipseShape implements Shape {
 	public void setEllipse(Ellipse ellipse) {
 		this.ellipse = ellipse;
 	}
-
 }

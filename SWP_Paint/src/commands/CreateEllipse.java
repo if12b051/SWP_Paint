@@ -41,16 +41,22 @@ public class CreateEllipse implements Command{
 		 newEllipse.getEllipse().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
 			@Override
-			public void handle(MouseEvent arg0) {
+			public void handle(MouseEvent event) {
 				String curAction = MainController.preferences.get("action").getStringPreference();
 				System.out.println("Tool: " + curAction);
 				
 				switch(curAction){
 				case "group":
 					System.out.println("Ellipse die zu einer Gruppe hinzugefügt werden will");
+					Command command = null;
+					
+					command = new GroupShapes();
+					break;
+				case "edit":
+					newEllipse.getEllipse().setCenterX(event.getSceneX());
+					newEllipse.getEllipse().setCenterY(event.getSceneY());
 					
 					break;
-				
 				}
 				
 			}
