@@ -73,20 +73,35 @@ public class EllipseShape extends ShapeComponent {
 				case "edit":
 					double differenceX = 0;
 					double differenceY = 0;
+					double factor = 0;
 					
+					double curResizeSlider = MainController.preferences.get("resize").getDoublePreference();
+					factor = curResizeSlider/100;
 					
-					differenceX = (event.getSceneX() - ellipse.getCenterX());
-					differenceY = (event.getSceneY() - ellipse.getCenterY());
-					if(thisShape.getParent().getParent() != null) {
-						System.out.println("Children second or higher generation..");
-						moveComponent(thisShape.getParent(), differenceX, differenceY);
+					if(curResizeSlider != 100){
+						if(thisShape.getParent().getParent() != null) {
+							resizeComponent(thisShape.getParent(), factor);
+						}
+						else {					
+							thisShape.getNode().setScaleX(factor);
+							thisShape.getNode().setScaleY(factor);
+						}
+						MainController.resetResizeSlider();
 					}
 					else {
-						System.out.println("Children first generation..");
-						thisShape.getNode().setLayoutX(differenceX);
-						thisShape.getNode().setLayoutY(differenceY);
+						differenceX = (event.getSceneX() - ellipse.getCenterX());
+						differenceY = (event.getSceneY() - ellipse.getCenterY());
+						if(thisShape.getParent().getParent() != null) {
+							System.out.println("Children second or higher generation..");
+							moveComponent(thisShape.getParent(), differenceX, differenceY);
+						}
+						else {
+							System.out.println("Children first generation..");
+							thisShape.getNode().setLayoutX(differenceX);
+							thisShape.getNode().setLayoutY(differenceY);
+						}
 					}
-					
+
 //					System.out.println("Group: " + newEllipse.group);
 //					
 //					if(newEllipse.group) {
@@ -129,11 +144,15 @@ public class EllipseShape extends ShapeComponent {
 		}
 	}
 	
-	public void resizeComponent(double resizeValue) {
-		double radiusX = ellipse.radiusXProperty().getValue();
-		double radiusY = ellipse.radiusYProperty().getValue();
-		ellipse.radiusXProperty().setValue(radiusX*resizeValue);
-		ellipse.radiusYProperty().setValue(radiusY*resizeValue);
+	public void resizeComponent(ShapeComponent theShape, double factor) {
+		if(theShape.isGroup()) {
+			for(ShapeComponent s : theShape.getChildren()) {
+				resizeComponent(s, factor);
+			}
+		} else {
+			theShape.getNode().setScaleX(factor);
+			theShape.getNode().setScaleY(factor);
+		}
 	}
 	
 	@Override

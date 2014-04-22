@@ -1,6 +1,8 @@
 package commands;
 
 import gui.MainController;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 
@@ -16,7 +18,10 @@ public class ClearAll implements Command{
 	@Override
 	public void execute() {
 		//curArtBoard.clearRect(0, 0, MainController.CANVAS_WIDTH, MainController.CANVAS_HEIGHT);
-		curArtBoard.getChildren().removeAll();
+		
+		ObservableList<Node> myList = curArtBoard.getChildren();
+		
+		curArtBoard.getChildren().removeAll(myList);
 	}
 
 	@Override

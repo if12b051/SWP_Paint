@@ -12,8 +12,7 @@ public class GroupShapes implements Command{
 	//private static ObservableList<Node> shapeGroups;
 	private static ArrayList<Node> group = new ArrayList<Node>();
 	
-	public GroupShapes() {
-		
+	public GroupShapes() {	
 	}
 
 	@Override
