@@ -31,6 +31,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -54,12 +55,12 @@ import javafx.util.converter.DoubleStringConverter;
 public class MainController implements Initializable{
 	
 	static public ShapeComponent everyShape = new ShapeGroup();
-	static public ShapeComponent shapeBeingGrouped, shapeBeingEdited;
+	static public ShapeComponent shapeBeingGrouped;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		/* Constructors */
-		drawnGeometry = new ArrayList<ShapeComponent>();
+		drawnGeometry = new ArrayList<Node>();
 		mediatorList = new ArrayList<Mediator>();
 		preferences = new HashMap<String, Preference>();
 		undo = new Stack<Command>();
@@ -209,6 +210,7 @@ public class MainController implements Initializable{
 		String action = "clear";
 		System.out.println("Action: " + action);
 		setPreferences(action);
+		//Command command = new ClearAll(pArtBoard);
 		Command command = new ClearAll(pArtBoard);
 		command.execute();
 		putCmdOnStack(command);
@@ -342,10 +344,6 @@ public class MainController implements Initializable{
 			public void changed(ObservableValue<? extends String> observable,
 					String oldValue, String newValue) {
 				lblResize.setText(Integer.toString((int) Double.parseDouble(newValue)));
-				if(shapeBeingEdited != null) {
-					shapeBeingEdited.setResizeValue(sResize.getValue());
-					
-				}
 				setPreferences("keep");
 			}
 		});
@@ -386,12 +384,22 @@ public class MainController implements Initializable{
 		lblResize.setText("100");
 	}
 	
+	public static void resetResizeSlider() {
+		sResize.setValue(100);
+	}
+	
+	public static void addToDrawnGeometry(Node thisShape) {
+		drawnGeometry.add(thisShape);
+	}
+	
 	private final String[] TOOL_TYPES = {"Circle", "Ellipse", "Triangle", "Square", "Rectangle", "Pencil"};
 	public final static int CANVAS_WIDTH=474, CANVAS_HEIGHT=482;
 	
 	/* GUI Objects */
 	@FXML private ComboBox<String> cbTools;
-	@FXML private Slider sSize, sWidth, sHeight, sRadius, sResize;
+	@FXML private Slider sSize, sWidth, sHeight, sRadius;
+	@FXML
+	private static Slider sResize;
 	@FXML private Label lblRadius, lblSize, lblWidth, lblHeight, lblResize;
 	@FXML private Pane pArtBoard, pColorPicker, pControl;
 	@FXML private Button bClear, bGroup, bDraw, bEdit, bUndo, bRedo, bHelp;
@@ -403,6 +411,6 @@ public class MainController implements Initializable{
     private Stack<Command> redo;
     public static Map<String, Preference> preferences; //"action", "tool", "paint", "size", "radius", "width", "height"
     private CloneFactory cloneFactory;
-    private ArrayList<ShapeComponent> drawnGeometry;
+    private static ArrayList<Node> drawnGeometry;
     private ArrayList<Mediator> mediatorList;
 }

@@ -23,8 +23,7 @@ public class ToolsResizeMediator implements Mediator {
 	public BooleanBinding disableSlider = new BooleanBinding() {
 		@Override
 		protected boolean computeValue() {
-			if(MainController.preferences.get("action").getStringPreference().equals("edit") && MainController.shapeBeingEdited != null) {
-				sliderValue.setValue(MainController.shapeBeingEdited.getResizeValue());
+			if(MainController.preferences.get("action").getStringPreference().equals("edit")) {
 				return false;
 			}
 			else

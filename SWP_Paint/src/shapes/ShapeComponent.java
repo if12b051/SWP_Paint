@@ -3,6 +3,9 @@ package shapes;
 import java.util.ArrayList;
 
 import javafx.scene.Node;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 
 public abstract class ShapeComponent implements Cloneable {
 	
@@ -54,11 +57,15 @@ public abstract class ShapeComponent implements Cloneable {
 		throw new UnsupportedOperationException();
 	}
 	
-	public void setResizeValue(double value) {
+	public Ellipse getEllipse() {
 		throw new UnsupportedOperationException();
 	}
 	
-	public double getResizeValue() {
+	public Rectangle getRectangle() {
+		throw new UnsupportedOperationException();
+	}
+	
+	public Polygon getTriangle() {
 		throw new UnsupportedOperationException();
 	}
 }

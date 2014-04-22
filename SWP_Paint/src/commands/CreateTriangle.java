@@ -1,5 +1,7 @@
 package commands;
 
+import gui.MainController;
+
 import java.util.Map;
 
 import javafx.scene.layout.Pane;
@@ -19,6 +21,7 @@ public class CreateTriangle implements Command{
 				mouseX - preferences.get("width").getDoublePreference()/2, mouseY + preferences.get("height").getDoublePreference()/2,
 				mouseX, mouseY - preferences.get("height").getDoublePreference()/2
 		});
+		newTriangle.getTriangle().setFill(MainController.preferences.get("paint").getPaintPreference());
 	}
 	
 	@Override
