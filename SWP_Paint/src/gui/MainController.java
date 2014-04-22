@@ -17,7 +17,8 @@ import commands.GroupShapes;
 import shapes.CloneFactory;
 import shapes.EllipseShape;
 import shapes.RectangleShape;
-import shapes.Shape;
+import shapes.ShapeComponent;
+import shapes.ShapeGroup;
 import shapes.TriangleShape;
 import application.Preference;
 import javafx.beans.binding.Bindings;
@@ -52,10 +53,13 @@ import javafx.util.converter.DoubleStringConverter;
 
 public class MainController implements Initializable{
 	
+	static public ShapeComponent everyShape = new ShapeGroup();
+	static public ShapeComponent shapeBeingGrouped;
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		/* Constructors */
-		drawnGeometry = new ArrayList<Shape>();
+		drawnGeometry = new ArrayList<ShapeComponent>();
 		mediatorList = new ArrayList<Mediator>();
 		preferences = new HashMap<String, Preference>();
 		undo = new Stack<Command>();
@@ -77,7 +81,7 @@ public class MainController implements Initializable{
         pColorPicker.getChildren().addAll(colorPicker);
         
         /* add eventListeners to canvas for: CLICKED and DRAGGED */
-        pCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+        pArtBoard.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				double mouseX, mouseY;
@@ -94,20 +98,20 @@ public class MainController implements Initializable{
 					{
 						case "Circle":
 						case "Ellipse":
-							EllipseShape newEllipse = new EllipseShape();
-							drawnGeometry.add(newEllipse);
-							command = new CreateEllipse(preferences, mouseX, mouseY, newEllipse, pCanvas);
+							EllipseShape newEllipse = new EllipseShape(everyShape);
+							everyShape.add(newEllipse);
+							command = new CreateEllipse(mouseX, mouseY, newEllipse, pArtBoard);
 							break;
 						case "Triangle":
 							TriangleShape newTriangle = new TriangleShape();
-							drawnGeometry.add(newTriangle);
-							command = new CreateTriangle(preferences, mouseX, mouseY, newTriangle, pCanvas);
+							everyShape.add(newTriangle);
+							command = new CreateTriangle(preferences, mouseX, mouseY, newTriangle, pArtBoard);
 							break;
 						case "Rectangle":
 						case "Square":
 							RectangleShape newRectangle = new RectangleShape();
-							drawnGeometry.add(newRectangle);
-							command = new CreateRectangle(preferences, mouseX, mouseY, newRectangle, pCanvas);
+							everyShape.add(newRectangle);
+							command = new CreateRectangle(preferences, mouseX, mouseY, newRectangle, pArtBoard);
 //							RectangleShape newRectangle = (RectangleShape) cloneFactory.getClone(rectanglePrototype);
 							//command = new CreateRectangle(preferences, mouseX, mouseY, newRectangle, artBoard);
 							break;
@@ -205,7 +209,7 @@ public class MainController implements Initializable{
 		String action = "clear";
 		System.out.println("Action: " + action);
 		setPreferences(action);
-		Command command = new ClearAll(pCanvas);
+		Command command = new ClearAll(pArtBoard);
 		command.execute();
 		putCmdOnStack(command);
 	}
@@ -382,7 +386,7 @@ public class MainController implements Initializable{
 	@FXML private ComboBox<String> cbTools;
 	@FXML private Slider sSize, sWidth, sHeight, sRadius, sResize;
 	@FXML private Label lblRadius, lblSize, lblWidth, lblHeight, lblResize;
-	@FXML private Pane pCanvas, pColorPicker, pControl;
+	@FXML private Pane pArtBoard, pColorPicker, pControl;
 	@FXML private Button bClear, bGroup, bDraw, bEdit, bUndo, bRedo, bHelp;
 	private final ColorPicker colorPicker = new ColorPicker();
 	private MainControllerModel model;
@@ -392,6 +396,6 @@ public class MainController implements Initializable{
     private Stack<Command> redo;
     public static Map<String, Preference> preferences; //"action", "tool", "paint", "size", "radius", "width", "height"
     private CloneFactory cloneFactory;
-    private ArrayList<Shape> drawnGeometry;
+    private ArrayList<ShapeComponent> drawnGeometry;
     private ArrayList<Mediator> mediatorList;
 }

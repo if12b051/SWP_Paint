@@ -7,7 +7,7 @@ public class CloneFactory {
 	 * @param shape		the shape to be copied
 	 * @return			the copy of the shape
 	 */
-	public Shape getClone(Shape shape) {
+	public ShapeComponent getClone(ShapeComponent shape) {
 		return shape.makeCopy();
 	}
 }

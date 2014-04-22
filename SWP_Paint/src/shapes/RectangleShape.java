@@ -3,18 +3,30 @@ package shapes;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
-public class RectangleShape implements Shape{
-	private Rectangle rectangle;
+public class RectangleShape extends ShapeComponent{
+	private Rectangle rectangle = new Rectangle();
+	private ShapeComponent parent;
 	
 	public RectangleShape() {
 		System.out.println("Rectangle created.");
-		rectangle = new Rectangle();
+	}
+	
+	public void moveComponent(double mouseX, double mouseY) {
+		rectangle.setX(mouseX);
+		rectangle.setY(mouseY);
+	}
+	
+	public void resizeComponent(double resizeValue) {
+		double width = rectangle.getWidth();
+		double height = rectangle.getHeight();
+		rectangle.setWidth(width*resizeValue);
+		rectangle.setHeight(height*resizeValue);
 	}
 	
 	@Override
-	public Shape makeCopy() {
+	public ShapeComponent makeCopy() {
 		
-		Shape newRectangle = null;
+		ShapeComponent newRectangle = null;
 		
 		try {
 			newRectangle = (RectangleShape) super.clone();
@@ -31,5 +43,8 @@ public class RectangleShape implements Shape{
 	public void setRectangle(Rectangle rectangle) {
 		this.rectangle = rectangle;
 	}
-
+	
+	public boolean isGroup() {
+		return false;
+	}
 }

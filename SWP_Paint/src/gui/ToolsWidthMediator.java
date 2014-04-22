@@ -20,8 +20,7 @@ public class ToolsWidthMediator implements Mediator {
 	public BooleanBinding disableSlider = new BooleanBinding() {
 		@Override
 		protected boolean computeValue() {
-			if((curTool.get().equals("Ellipse") || 
-					curTool.get().equals("Circle") || 
+			if((curTool.get().equals("Ellipse") ||  
 					curTool.get().equals("Square") || 
 					curTool.get().equals("Rectangle") || 
 					curTool.get().equals("Triangle")) &&

@@ -3,26 +3,36 @@ package shapes;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Polygon;
 
-public class TriangleShape implements Shape {
-	private Polygon triangle;
+public class TriangleShape extends ShapeComponent {
+	private Polygon triangle = new Polygon();
 	
 	public TriangleShape() {
 		System.out.println("Triangle created.");
-		triangle = new Polygon();
+	}
+	
+	public void moveComponent(double mouseX, double mouseY) {
+//		triangle.set
+//		rectangle.setX(mouseX);
+//		rectangle.setY(mouseY);
+	}
+	
+	public void resizeComponent(double resizeValue) {
+//		double width = rectangle.getWidth();
+//		double height = rectangle.getHeight();
+//		rectangle.setWidth(width*resizeValue);
+//		rectangle.setHeight(height*resizeValue);
 	}
 	
 	@Override
-	public Shape makeCopy() {
+	public ShapeComponent makeCopy() {
 		
-		Shape newEllipse = null;
+		ShapeComponent newEllipse = null;
 		
 		try {
 			newEllipse = (EllipseShape) super.clone();
-			System.out.println("CURRENTLY CLONING");
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
-		System.out.println("CLONING ELLIPSE");
 		return newEllipse;
 	}
 
@@ -32,6 +42,10 @@ public class TriangleShape implements Shape {
 
 	public void setTriangle(Polygon triangle) {
 		this.triangle = triangle;
+	}
+	
+	public boolean isGroup() {
+		return false;
 	}
 
 }
