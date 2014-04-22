@@ -100,36 +100,10 @@ public class EllipseShape extends ShapeComponent {
 							thisShape.getNode().setLayoutX(differenceX);
 							thisShape.getNode().setLayoutY(differenceY);
 						}
-					}
-
-//					System.out.println("Group: " + newEllipse.group);
-//					
-//					if(newEllipse.group) {
-//						
-//						ArrayList<Node> group = GroupShapes.getGroup();
-//						
-//						double differenceX = 0;
-//						double differenceY = 0;
-//						
-//						differenceX = (event.getSceneX() - newEllipse.getEllipse().getCenterX());
-//						differenceY = (event.getSceneY() - newEllipse.getEllipse().getCenterY());
-//						
-//						for(int i = 0;i<group.size(); i++) {
-//							if(newEllipse.getEllipse().toString()!=group.get(i).toString()) {
-//								group.get(i).setLayoutX(differenceX);
-//								group.get(i).setLayoutY(differenceY);
-//							}
-//						}
-//					}
-//					else {
-//						newEllipse.getEllipse().setCenterX(event.getSceneX());
-//						newEllipse.getEllipse().setCenterY(event.getSceneY());
-//					}	
+					}	
 					break;
 				}
-				
 			}
-			 
 		 });
 	}
 	

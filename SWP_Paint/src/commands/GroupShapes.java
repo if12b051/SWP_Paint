@@ -6,6 +6,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 
 public class GroupShapes implements Command{
 	//private static Group group = new Group();
@@ -21,6 +23,14 @@ public class GroupShapes implements Command{
 	
 	public void execute(Ellipse e) {
 		group.add(e);
+	}
+	
+	public void execute(Rectangle r) {
+		group.add(r);
+	}
+	
+	public void execute(Polygon p) {
+		group.add(p);
 	}
 
 	@Override

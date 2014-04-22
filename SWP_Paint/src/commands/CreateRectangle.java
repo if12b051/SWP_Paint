@@ -19,14 +19,14 @@ public class CreateRectangle implements Command{
 	private RectangleShape newRectangle;
 	private Pane artBoard;
 	
-	public CreateRectangle(Map<String, Preference> preferences, double mouseX, double mouseY, RectangleShape rectangle, Pane artBoard) {
+	public CreateRectangle(double mouseX, double mouseY, RectangleShape rectangle, Pane artBoard) {
 		this.artBoard = artBoard;
 		this.newRectangle = rectangle;
-		newRectangle.getRectangle().setX(mouseX - preferences.get("width").getDoublePreference()/2);
-		newRectangle.getRectangle().setY(mouseY - preferences.get("height").getDoublePreference()/2);
-		newRectangle.getRectangle().setHeight(preferences.get("height").getDoublePreference());
-		newRectangle.getRectangle().setWidth(preferences.get("width").getDoublePreference());
-		newRectangle.getRectangle().setFill(preferences.get("paint").getPaintPreference());
+		newRectangle.getRectangle().setX(mouseX - MainController.preferences.get("width").getDoublePreference()/2);
+		newRectangle.getRectangle().setY(mouseY - MainController.preferences.get("height").getDoublePreference()/2);
+		newRectangle.getRectangle().setHeight(MainController.preferences.get("height").getDoublePreference());
+		newRectangle.getRectangle().setWidth(MainController.preferences.get("width").getDoublePreference());
+		newRectangle.getRectangle().setFill(MainController.preferences.get("paint").getPaintPreference());
 	}
 	
 	@Override

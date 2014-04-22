@@ -104,15 +104,15 @@ public class MainController implements Initializable{
 							command = new CreateEllipse(mouseX, mouseY, newEllipse, pArtBoard);
 							break;
 						case "Triangle":
-							TriangleShape newTriangle = new TriangleShape();
+							TriangleShape newTriangle = new TriangleShape(everyShape);
 							everyShape.add(newTriangle);
-							command = new CreateTriangle(preferences, mouseX, mouseY, newTriangle, pArtBoard);
+							command = new CreateTriangle(mouseX, mouseY, newTriangle, pArtBoard);
 							break;
 						case "Rectangle":
 						case "Square":
-							RectangleShape newRectangle = new RectangleShape();
+							RectangleShape newRectangle = new RectangleShape(everyShape);
 							everyShape.add(newRectangle);
-							command = new CreateRectangle(preferences, mouseX, mouseY, newRectangle, pArtBoard);
+							command = new CreateRectangle(mouseX, mouseY, newRectangle, pArtBoard);
 //							RectangleShape newRectangle = (RectangleShape) cloneFactory.getClone(rectanglePrototype);
 							//command = new CreateRectangle(preferences, mouseX, mouseY, newRectangle, artBoard);
 							break;

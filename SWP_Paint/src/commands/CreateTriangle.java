@@ -1,5 +1,7 @@
 package commands;
 
+import gui.MainController;
+
 import java.util.Map;
 
 import javafx.scene.layout.Pane;
@@ -11,13 +13,13 @@ public class CreateTriangle implements Command{
 	private TriangleShape newTriangle;
 	private Pane artBoard;
 	
-	public CreateTriangle(Map<String, Preference> preferences, double mouseX, double mouseY, TriangleShape triangle, Pane artBoard) {
+	public CreateTriangle(double mouseX, double mouseY, TriangleShape triangle, Pane artBoard) {
 		this.artBoard = artBoard;
 		this.newTriangle = triangle;
 		newTriangle.getTriangle().getPoints().addAll(new Double[]{
-				mouseX + preferences.get("width").getDoublePreference()/2, mouseY + preferences.get("height").getDoublePreference()/2,
-				mouseX - preferences.get("width").getDoublePreference()/2, mouseY + preferences.get("height").getDoublePreference()/2,
-				mouseX, mouseY - preferences.get("height").getDoublePreference()/2
+				mouseX + MainController.preferences.get("width").getDoublePreference()/2, mouseY + MainController.preferences.get("height").getDoublePreference()/2,
+				mouseX - MainController.preferences.get("width").getDoublePreference()/2, mouseY + MainController.preferences.get("height").getDoublePreference()/2,
+				mouseX, mouseY - MainController.preferences.get("height").getDoublePreference()/2
 		});
 	}
 	
