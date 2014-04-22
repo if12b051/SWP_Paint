@@ -32,6 +32,9 @@ public class CreateEllipse implements Command{
 		newEllipse.getEllipse().setRadiusX(MainController.preferences.get("width").getDoublePreference());
 		newEllipse.getEllipse().setRadiusY(MainController.preferences.get("radius").getDoublePreference());
 		newEllipse.getEllipse().setFill(MainController.preferences.get("paint").getPaintPreference());
+		newEllipse.setFirstWidth(newEllipse.getEllipse().getRadiusX());
+		newEllipse.setFirstRadius(newEllipse.getEllipse().getRadiusY());
+		newEllipse.setResizeValue(100);
 	}
 	
 	@Override

@@ -5,8 +5,8 @@ import gui.MainController;
 import java.util.ArrayList;
 
 import commands.GroupShapes;
-
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
@@ -15,12 +15,14 @@ import javafx.scene.shape.Ellipse;
 public class EllipseShape extends ShapeComponent {
 
 	private Ellipse ellipse = new Ellipse();
+	private double firstRadius, firstWidth, resizeValue;
 	private ShapeComponent parent, thisShape;
 	
 	public EllipseShape(ShapeComponent parentMain) {
 		System.out.println("Ellipse created.");
 		this.parent = parentMain;
 		thisShape = this;
+		this.enableThisDrag();
 		ellipse.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
 			@Override
@@ -71,46 +73,7 @@ public class EllipseShape extends ShapeComponent {
 					}
 					break;
 				case "edit":
-					double differenceX = 0;
-					double differenceY = 0;
-					
-					
-					differenceX = (event.getSceneX() - ellipse.getCenterX());
-					differenceY = (event.getSceneY() - ellipse.getCenterY());
-					if(thisShape.getParent().getParent() != null) {
-						System.out.println("Children second or higher generation..");
-						moveComponent(thisShape.getParent(), differenceX, differenceY);
-					}
-					else {
-						System.out.println("Children first generation..");
-						thisShape.getNode().setLayoutX(differenceX);
-						thisShape.getNode().setLayoutY(differenceY);
-					}
-					
-//					System.out.println("Group: " + newEllipse.group);
-//					
-//					if(newEllipse.group) {
-//						
-//						ArrayList<Node> group = GroupShapes.getGroup();
-//						
-//						double differenceX = 0;
-//						double differenceY = 0;
-//						
-//						differenceX = (event.getSceneX() - newEllipse.getEllipse().getCenterX());
-//						differenceY = (event.getSceneY() - newEllipse.getEllipse().getCenterY());
-//						
-//						for(int i = 0;i<group.size(); i++) {
-//							if(newEllipse.getEllipse().toString()!=group.get(i).toString()) {
-//								group.get(i).setLayoutX(differenceX);
-//								group.get(i).setLayoutY(differenceY);
-//							}
-//						}
-//					}
-//					else {
-//						newEllipse.getEllipse().setCenterX(event.getSceneX());
-//						newEllipse.getEllipse().setCenterY(event.getSceneY());
-//					}	
-					break;
+					MainController.shapeBeingEdited = thisShape;
 				}
 				
 			}
@@ -171,5 +134,95 @@ public class EllipseShape extends ShapeComponent {
 	
 	public Node getNode() {
 		return ellipse;
+	}
+	
+	// records relative x and y co-ordinates.
+	static class Delta { double x, y; }
+		
+		// make a node movable by dragging it around with the mouse.
+	private void enableThisDrag() {
+	    final Delta dragDelta = new Delta();
+	    thisShape.getNode().setOnMousePressed(new EventHandler<MouseEvent>() {
+	      @Override public void handle(MouseEvent mouseEvent) {
+	        // record a delta distance for the drag and drop operation.
+	    	  String curAction = MainController.preferences.get("action").getStringPreference();
+	    	  if(curAction.equals("edit")) {
+		    	  dragDelta.x = thisShape.getNode().getLayoutX() - mouseEvent.getX();
+		    	  dragDelta.y = thisShape.getNode().getLayoutY() - mouseEvent.getY();
+		    	  ellipse.getScene().setCursor(Cursor.MOVE);
+	    	  }
+	      }
+	    });
+	    thisShape.getNode().setOnMouseReleased(new EventHandler<MouseEvent>() {
+	      @Override public void handle(MouseEvent mouseEvent) {
+	    	  String curAction = MainController.preferences.get("action").getStringPreference();
+	    	  if(curAction.equals("edit")) {
+	    		  ellipse.getScene().setCursor(Cursor.HAND);
+	    	  }
+	      }
+	    });
+	    thisShape.getNode().setOnMouseDragged(new EventHandler<MouseEvent>() {
+	      @Override public void handle(MouseEvent mouseEvent) {
+	    	  String curAction = MainController.preferences.get("action").getStringPreference();
+	    	  double finalX, finalY;
+	    	  if(curAction.equals("edit")) {
+	    		  finalX = ((mouseEvent.getX()+dragDelta.x) );
+    			  finalY = ((mouseEvent.getY()+dragDelta.y) );
+	    		  if(thisShape.getParent().getParent() != null)
+	    		  {
+	    			  moveComponent(thisShape.getParent(), finalX, finalY);
+	    		  }
+	    		  else {
+	    			 
+	    			  moveComponent(thisShape, finalX, finalY);
+	    		  }
+	    		  //thisShape.getNode().setTranslateX(30);
+	    	  }
+	      }
+	    });
+	    thisShape.getNode().setOnMouseEntered(new EventHandler<MouseEvent>() {
+	      @Override public void handle(MouseEvent mouseEvent) {
+	        if (!mouseEvent.isPrimaryButtonDown()) {
+	        	String curAction = MainController.preferences.get("action").getStringPreference();
+		    	if(curAction.equals("edit")) {
+		    		thisShape.getNode().getScene().setCursor(Cursor.HAND);
+		    	}
+	        }
+	      }
+	    });
+	    thisShape.getNode().setOnMouseExited(new EventHandler<MouseEvent>() {
+	      @Override public void handle(MouseEvent mouseEvent) {
+	        if (!mouseEvent.isPrimaryButtonDown()) {
+	        	String curAction = MainController.preferences.get("action").getStringPreference();
+		    	if(curAction.equals("edit")) {
+		    		thisShape.getNode().getScene().setCursor(Cursor.DEFAULT);
+		    	}
+	        }
+	      }
+	    });
+	  }
+
+	public double getResizeValue() {
+		return resizeValue;
+	}
+
+	public void setResizeValue(double resizeValue) {
+		this.resizeValue = resizeValue;
+	}
+
+	public double getFirstRadius() {
+		return firstRadius;
+	}
+
+	public void setFirstRadius(double firstRadius) {
+		this.firstRadius = firstRadius;
+	}
+
+	public double getFirstWidth() {
+		return firstWidth;
+	}
+
+	public void setFirstWidth(double firstWidth) {
+		this.firstWidth = firstWidth;
 	}
 }

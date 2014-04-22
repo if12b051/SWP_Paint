@@ -22,7 +22,7 @@ public abstract class ShapeComponent implements Cloneable {
 		throw new UnsupportedOperationException();
 	}
 	
-	public void moveComponent(double mouseX, double mouseY) {
+	public void moveComponent(ShapeComponent shape, double mouseX, double mouseY) {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -51,6 +51,14 @@ public abstract class ShapeComponent implements Cloneable {
 	}
 	
 	public Node getNode() {
+		throw new UnsupportedOperationException();
+	}
+	
+	public void setResizeValue(double value) {
+		throw new UnsupportedOperationException();
+	}
+	
+	public double getResizeValue() {
 		throw new UnsupportedOperationException();
 	}
 }

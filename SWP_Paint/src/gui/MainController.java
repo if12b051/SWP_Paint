@@ -54,7 +54,7 @@ import javafx.util.converter.DoubleStringConverter;
 public class MainController implements Initializable{
 	
 	static public ShapeComponent everyShape = new ShapeGroup();
-	static public ShapeComponent shapeBeingGrouped;
+	static public ShapeComponent shapeBeingGrouped, shapeBeingEdited;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -258,6 +258,43 @@ public class MainController implements Initializable{
 		StringConverter<? extends Number> converter = new DoubleStringConverter();
 		
 		resetValues();
+		
+		
+		/* initialize mediators */
+		ToolsSizeMediator tsMediator = new ToolsSizeMediator();
+		tsMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
+		sSize.disableProperty().bind(tsMediator.getDisable());
+		
+		ToolsRadiusMediator trMediator = new ToolsRadiusMediator();
+		trMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
+		sRadius.disableProperty().bind(trMediator.getDisable());
+		
+		ToolsWidthMediator twMediator = new ToolsWidthMediator();
+		twMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
+		sWidth.disableProperty().bind(twMediator.getDisable());
+		
+		ToolsHeightMediator thMediator = new ToolsHeightMediator();
+		thMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
+		sHeight.disableProperty().bind(thMediator.getDisable());
+		
+		ToolsResizeMediator trsMediator = new ToolsResizeMediator();
+		trsMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
+		sResize.disableProperty().bind(trsMediator.getDisable());
+		
+		ToolsButtonsMediator tbMediator = new ToolsButtonsMediator();
+		cbTools.disableProperty().bind(tbMediator.getDisable());
+		
+		ToolsButtonsMediator tcMediator = new ToolsButtonsMediator();
+		colorPicker.disableProperty().bind(tcMediator.getDisable());
+		
+		mediatorList.add(tsMediator);
+		mediatorList.add(trMediator);
+		mediatorList.add(twMediator);
+		mediatorList.add(thMediator);
+		mediatorList.add(trsMediator);
+		mediatorList.add(tbMediator);
+		mediatorList.add(tcMediator);
+		
 		Bindings.bindBidirectional(lblRadius.textProperty(), sRadius.valueProperty(), (StringConverter<Number>)converter);
 		lblRadius.textProperty().addListener(new ChangeListener<String>()  {
 			@Override
@@ -299,11 +336,16 @@ public class MainController implements Initializable{
 		});
 		
 		Bindings.bindBidirectional(lblResize.textProperty(), sResize.valueProperty(), (StringConverter<Number>)converter);
+		sResize.valueProperty().bindBidirectional(trsMediator.sliderValue);
 		lblResize.textProperty().addListener(new ChangeListener<String>()  {
 			@Override
 			public void changed(ObservableValue<? extends String> observable,
 					String oldValue, String newValue) {
 				lblResize.setText(Integer.toString((int) Double.parseDouble(newValue)));
+				if(shapeBeingEdited != null) {
+					shapeBeingEdited.setResizeValue(sResize.getValue());
+					
+				}
 				setPreferences("keep");
 			}
 		});
@@ -325,41 +367,6 @@ public class MainController implements Initializable{
 		});
 		/* here so double values are not shown */
 		resetLabels();
-		
-		/* initialize mediators */
-		ToolsSizeMediator tsMediator = new ToolsSizeMediator();
-		tsMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
-		sSize.disableProperty().bind(tsMediator.getDisable());
-		
-		ToolsRadiusMediator trMediator = new ToolsRadiusMediator();
-		trMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
-		sRadius.disableProperty().bind(trMediator.getDisable());
-		
-		ToolsWidthMediator twMediator = new ToolsWidthMediator();
-		twMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
-		sWidth.disableProperty().bind(twMediator.getDisable());
-		
-		ToolsHeightMediator thMediator = new ToolsHeightMediator();
-		thMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
-		sHeight.disableProperty().bind(thMediator.getDisable());
-		
-		ToolsResizeMediator trsMediator = new ToolsResizeMediator();
-		trsMediator.getCurTool().bindBidirectional(cbTools.valueProperty());
-		sResize.disableProperty().bind(trsMediator.getDisable());
-		
-		ToolsButtonsMediator tbMediator = new ToolsButtonsMediator();
-		cbTools.disableProperty().bind(tbMediator.getDisable());
-		
-		ToolsButtonsMediator tcMediator = new ToolsButtonsMediator();
-		colorPicker.disableProperty().bind(tcMediator.getDisable());
-		
-		mediatorList.add(tsMediator);
-		mediatorList.add(trMediator);
-		mediatorList.add(twMediator);
-		mediatorList.add(thMediator);
-		mediatorList.add(trsMediator);
-		mediatorList.add(tbMediator);
-		mediatorList.add(tcMediator);
 	}
 	
 	private void resetValues() {
