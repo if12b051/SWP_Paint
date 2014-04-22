@@ -51,15 +51,15 @@ public class EllipseShape extends ShapeComponent {
 								
 								System.out.println("Created new group.");
 							} else if(parent.getParent() == null && MainController.shapeBeingGrouped.getParent().getParent() != null) {
-								MainController.shapeBeingGrouped.getParent().add(parent);
-								parent.setParent(MainController.shapeBeingGrouped.getParent());
+								MainController.shapeBeingGrouped.getParent().add(thisShape);
+								thisShape.setParent(MainController.shapeBeingGrouped.getParent());
 								System.out.println("Blabla 1");
 							} else if(parent.getParent() != null && MainController.shapeBeingGrouped.getParent().getParent() == null) {
-								parent.getParent().add(MainController.shapeBeingGrouped.getParent());
+								parent.add(MainController.shapeBeingGrouped);
 								MainController.shapeBeingGrouped.setParent(parent);
 								System.out.println("Blabla 2");
 							} else {
-								parent.getParent().add(MainController.shapeBeingGrouped.getParent());
+								parent.add(MainController.shapeBeingGrouped);
 								MainController.shapeBeingGrouped.setParent(parent);
 								System.out.println("Blabla 3");
 							}
